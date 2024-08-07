@@ -3,40 +3,48 @@ import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter } from "next/navigation";
 
-export default function Entry() {
+export default function HomeFan() {
   const router = useRouter();
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    localStorage.clear();
+    router.push("/");
+  };
+
   return (
     <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
       <div className="text-center">
-        <h1 className="display-4">ClubConnect</h1>
-        <p className="lead mb-4">
-          Welcome to ClubConnect! An app designed to enable fans and clubs of
-          Non-League Football to easily buy and sell tickets.
-        </p>
+        <h1 className="display-4" onClick={() => router.push("/home-fan")}>
+          ClubConnect
+        </h1>
         <div className="d-flex flex-column gap-3">
           <button
             className="btn btn-outline-dark btn-lg"
-            onClick={() => router.push("/login-fan")}
+            onClick={() => router.push("/club-finder")}
           >
-            Login Fan
+            Club Finder
           </button>
           <button
             className="btn btn-outline-dark btn-lg"
-            onClick={() => router.push("/login-club")}
+            onClick={() => router.push("/match-finder")}
           >
-            Login Club
+            Match Finder
           </button>
           <button
             className="btn btn-outline-dark btn-lg"
-            onClick={() => router.push("/register-fan")}
+            onClick={() => router.push("/fan-orders")}
           >
-            Register as a Fan
+            My Tickets
           </button>
           <button
             className="btn btn-outline-dark btn-lg"
-            onClick={() => router.push("/register-club")}
+            onClick={() => router.push("/fan-profile")}
           >
-            Register as a Club
+            My Profile
+          </button>
+          <button className="btn btn-outline-dark btn-lg" onClick={handleClick}>
+            Logout Fan
           </button>
         </div>
       </div>

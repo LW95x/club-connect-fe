@@ -3,40 +3,40 @@ import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter } from "next/navigation";
 
-export default function Entry() {
+export default function HomeClub() {
   const router = useRouter();
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    localStorage.clear();
+    router.push("/");
+  };
+
   return (
     <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
       <div className="text-center">
         <h1 className="display-4">ClubConnect</h1>
-        <p className="lead mb-4">
-          Welcome to ClubConnect! An app designed to enable fans and clubs of
-          Non-League Football to easily buy and sell tickets.
-        </p>
         <div className="d-flex flex-column gap-3">
           <button
             className="btn btn-outline-dark btn-lg"
-            onClick={() => router.push("/login-fan")}
+            onClick={() => router.push("/club-matches")}
           >
-            Login Fan
+            My Matches
           </button>
           <button
             className="btn btn-outline-dark btn-lg"
-            onClick={() => router.push("/login-club")}
+            onClick={() => router.push("/add-match")}
           >
-            Login Club
+            Add New Match
           </button>
           <button
             className="btn btn-outline-dark btn-lg"
-            onClick={() => router.push("/register-fan")}
+            onClick={() => router.push("/club-profile")}
           >
-            Register as a Fan
+            My Profile
           </button>
-          <button
-            className="btn btn-outline-dark btn-lg"
-            onClick={() => router.push("/register-club")}
-          >
-            Register as a Club
+          <button className="btn btn-outline-dark btn-lg" onClick={handleClick}>
+            Logout Club
           </button>
         </div>
       </div>
