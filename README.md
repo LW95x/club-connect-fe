@@ -15,3 +15,5 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 The live version of the website can be found at: https://clubconnects.netlify.app/
 
 To 'build' the production version, you can run: 'npm run build'
+
+ClubConnect backend: https://github.com/LW95x/the_football_pyramid_backend
