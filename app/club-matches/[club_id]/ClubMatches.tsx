@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Alert, Button } from "react-bootstrap";
@@ -86,7 +85,7 @@ export default function ClubMatches({
               <div className="text-muted mb-2">Price - £{event.price}</div>
               <div className="text-muted mb-2">Location - {event.location}</div>
               <div className="text-muted mb-2">
-                Date - {event.date_time?.split("T")[0]}
+                Date - {event.date_time?.split("T")[0]} @ {event.date_time?.split("T")[1].slice(0,5)}
               </div>
               <div className="text-muted mb-2">
                 Available Tickets - {event.available_tickets}

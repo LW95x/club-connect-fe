@@ -91,13 +91,16 @@ export default function ClubMatches() {
                   Date - {event.date_time?.split("T")[0]}
                 </div>
                 <div className="text-muted mb-2">
+                  Time - {event.date_time?.split("T")[1].slice(0,5)}
+                </div>
+                <div className="text-muted mb-2">
                   Available Tickets - {event.available_tickets}
                 </div>
               </Button>
             </li>
           ))
         ) : (
-          <p>No events found.</p>
+          <p>Loading club matches...</p>
         )}
       </ul>
     </div>

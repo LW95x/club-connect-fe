@@ -112,7 +112,7 @@ export default function ClubProfile() {
         </h1>
         <h3 className="display-12">Club Profile</h3>
       </div>
-      <form className="w-50" onSubmit={handlePasswordSubmit}>
+      <form className="w-100" onSubmit={handlePasswordSubmit}>
         <div className="form-group mb-3">
           <label htmlFor="currentpassword" className="form-label">
             Current Password
@@ -146,8 +146,8 @@ export default function ClubProfile() {
             onChange={(e) => setNewPassword(e.target.value)}
           />
         </div>
-        <div className="d-flex flex-column justify-content-end mb-5">
-          <button type="submit" className="btn btn-primary mb-2">
+        <div className="d-flex flex-column align-items-end mb-5">
+          <button type="submit" className="btn btn-primary mb-2" style={{width: "300px"}}>
             Update Password
           </button>
           <div className="mt-2">
@@ -156,7 +156,7 @@ export default function ClubProfile() {
           </div>
         </div>
       </form>
-      <form className="w-50 mt-10" onSubmit={handleSubmit}>
+      <form className="w-100 mt-10" onSubmit={handleSubmit}>
         <div className="form-group mb-3">
           <label htmlFor="email" className="form-label">
             Email
@@ -279,7 +279,7 @@ export default function ClubProfile() {
           />
         </div>
         <div className="d-flex justify-content-end mb-5">
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary" style={{width: "300px"}}>
             Update Profile
           </button>
         </div>

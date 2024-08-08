@@ -152,12 +152,13 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
 
       <form
         onSubmit={handleSubmit}
-        className="w-1"
-        style={{ maxWidth: "200px" }}
+        className="w-50"
+        style={{ maxWidth: "400px" }}
       >
-        <div className="d-flex justify-content-between align-items-center">
+        <div className="d-flex justify-content-center align-items-center">
           <input
             type="number"
+            style={{ width: "80px" }}
             className="form-control me-2"
             onChange={(e) => setQuantity(parseInt(e.target.value))}
             min="1"
@@ -169,7 +170,7 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
             Order Now
           </button>
         </div>
-        <div className="mt-3 bg-secondary p-2 rounded">
+        <div className="mt-3 p-2 rounded bg-dark text-light text-center">
           <label className="form-check-label">
             <input
               type="checkbox"
@@ -180,11 +181,13 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
             Add to Google Calendar?
           </label>
         </div>
-        <div className="mt-3 mb-2">
+        <div className="mt-3 mb-2 bg-success">
           {isSuccess && <span className="text-success">{isSuccess}</span>}
           {isError && <span className="text-danger">{isError}</span>}
         </div>
+        <div className="mt-3 p-2 rounded bg-dark text-light text-center">
         Total Price: £{quantity * (parseInt(event?.price ?? "0") || 0)}.00
+        </div>
       </form>
     </div>
   );

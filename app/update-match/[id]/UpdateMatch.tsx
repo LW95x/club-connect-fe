@@ -137,10 +137,10 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
             Date & Time
           </label>
           <input
-            type="date"
+            type="datetime-local"
             id="date"
             className="form-control"
-            value={event?.date_time?.split("T")[0]}
+            value={event?.date_time?.split(".")[0]}
             onChange={(e) => setEvent({ ...event, date_time: e.target.value })}
           />
         </div>
@@ -176,7 +176,7 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
           />
         </div>
         <div className="d-flex justify-content-end mb-5">
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary" style={{width: "200px"}}>
             Update Match
           </button>
         </div>

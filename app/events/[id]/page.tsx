@@ -1,25 +1,29 @@
-import { fetchAllEvents } from "@/utils/api";
+import { getEventById } from "@/utils/api";
 import SingleMatch from "./SingleMatch";
-
-async function fetchEventIds(): Promise<string[]> {
-  return fetchAllEvents()
-    .then((events) => {
-      return events.map((event) => event.event_id?.toString() ?? "");
-    })
-    .catch((error) => {
-      console.error("Error fetching event IDs:", error);
-      return [];
-    });
-}
+import { Event } from "@/interfaces/interfaces";
+import ClubErrorPage from "@/app/error-page/page";
 
 export async function generateStaticParams() {
-  const eventIds = await fetchEventIds();
-
-  return eventIds.map((id) => ({
-    id,
-  }));
+  const eventIds = Array.from({ length: 100 }, (_, i) => (i + 1).toString());
+  return eventIds.map((id) => ({ id }));
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+async function fetchEvent(eventId: string): Promise<Event | null> {
+  try {
+    const event = await getEventById(eventId);
+    return event ?? null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export default async function Page({ params }: { params: { id: string } }) {
+  const event = await fetchEvent(params.id);
+
+  if (!event) {
+    return <ClubErrorPage />
+  }
+  
   return <SingleMatch params={params} />;
 }

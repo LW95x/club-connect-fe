@@ -54,6 +54,16 @@ export default function AddMatch() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <>
+        <Alert variant="secondary" style={{ textAlign: "center" }}>
+          Loading...
+        </Alert>
+      </>
+    );
+  }
+
   return (
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
       <div className="text-center">
@@ -126,7 +136,7 @@ export default function AddMatch() {
             Date & Time of Match
           </label>
           <input
-            type="date"
+            type="datetime-local"
             id="date"
             className="form-control"
             required
@@ -163,7 +173,7 @@ export default function AddMatch() {
           />
         </div>
         <div className="d-flex justify-content-end mb-5">
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary" style={{width: "200px"}}>
             Create Match
           </button>
         </div>

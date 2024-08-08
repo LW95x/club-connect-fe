@@ -57,8 +57,16 @@ export default function MatchFinder() {
                 (window.location.href = `/events/${event.event_id}`)
               }
             >
-              <div className="fw-bold">{event.title}</div>
-              <div className="text-muted">{event.description}</div>
+              <div className="fw-bold mb-2">{event.title}</div>
+              <div className="text-muted mb-2">{event.description}</div>
+              <div className="text-muted mb-2">Price - £{event.price}</div>
+              <div className="text-muted mb-2">Location - {event.location}</div>
+              <div className="text-muted mb-2">
+                Date - {event.date_time?.split("T")[0]} @ {event.date_time?.split("T")[1].slice(0,5)}
+              </div>
+              <div className="text-muted mb-2">
+                Available Tickets - {event.available_tickets}
+              </div>
             </Button>
           </li>
         ))}

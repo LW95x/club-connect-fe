@@ -42,14 +42,13 @@ export default function FanOrders() {
         })
         .then((ordersWithEvents) => {
           setOrders(ordersWithEvents);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error(error);
           setIsError("Failed to fetch orders for this Fan ID.");
-        })
-        .finally(() => {
           setIsLoading(false);
-        });
+        })
     } else {
       setIsLoading(false);
     }
@@ -85,7 +84,7 @@ export default function FanOrders() {
             orders.map((order) => (
               <li
                 key={order.order_id}
-                className="my-2 w-100"
+                className="my-2 w-200"
                 style={{ maxWidth: "600px" }}
               >
                 <Button
@@ -94,35 +93,37 @@ export default function FanOrders() {
                   style={{ textAlign: "center" }}
                 >
                   <div className="fw-bold mb-2">
-                    Event ID - {order.event_id}
+                    {order.title}
                   </div>
-                  <div className="text-muted mb-2">
-                    Order Date - {order.order_date.split("T")[0] || ""} @{" "}
-                    {order.order_date.split("T")[1].slice(0, 5) || ""}
-                  </div>
-                  <div className="text-muted mb-2">
-                    Quantity - {order.quantity}
-                  </div>
-                  <div className="text-muted mb-2">
-                    Order Status - {order.order_status}
-                  </div>
-                  <div className="text-muted mb-2">
-                    Total Price - {order.total_price}
-                  </div>
-                  <div className="text-muted mb-2">{order.title}</div>
                   <div className="text-muted mb-2">{order.description}</div>
                   <div className="text-muted mb-2">
                     Event Date - {order?.date_time?.split("T")[0] || ""} @{" "}
                     {order?.date_time?.split("T")[1].slice(0, 5) || ""}
                   </div>
-                  <div className="text-muted mb-2">
+                  <div className="text-muted mb-4">
                     Location - {order.location}
+                  </div>
+                  <div className="fw-bold mb-2">
+                    Order Details
+                  </div>
+                  <div className="text-muted mb-2">
+                    Order Time & Date - {order.order_date.split("T")[0] || ""} @{" "}
+                    {order.order_date.split("T")[1].slice(0, 5) || ""}
+                  </div>
+                  <div className="text-muted mb-2">
+                    Quantity - {order.quantity} 
+                  </div>
+                  <div className="text-muted mb-2">
+                  Total Price - £{order.total_price}
+                  </div>
+                  <div className="text-muted mb-2">
+                    Order Status - <b>{order.order_status}</b>
                   </div>
                 </Button>
               </li>
             ))
           ) : (
-            <p>No orders found.</p>
+            <p>Loading orders...</p>
           )}
         </ul>
         {isError && <h3 style={{ color: "red" }}>{isError}</h3>}
