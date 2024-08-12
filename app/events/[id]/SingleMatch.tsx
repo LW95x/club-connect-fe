@@ -191,15 +191,15 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
         {token && !isTokenExpired ? (
             <Alert className="bg-success text-center text-white rounded">
               You are successfully authenticated with Google Calendar.
-              If you choose to tick "Add to Google Calendar", the order will be
+              If you choose to tick &quot;Add to Google Calendar&quot;, the order will be
               saved to your Google Calendar.
             </Alert>
           ) : (
             <Alert className="bg-dark text-center text-white rounded">
               You are not currently authenticated with Google Calendar, if you
-              choose to tick "Add to Google Calendar", you will be prompted to
+              choose to tick &quot;Add to Google Calendar&quot;, you will be prompted to
               authenticate to allow ClubConnect access to add the event to your Google
-              Calendar.{" "}
+              Calendar.
             </Alert>
           )}
         <div className="d-flex justify-content-center align-items-center">

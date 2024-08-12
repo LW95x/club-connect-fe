@@ -26,7 +26,7 @@ export default function HomeFan() {
   return (
     <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
       <div className="text-center">
-        <h1 className="display-4" onClick={() => {router.push("/home-fan"); setIsLoading(true);}}>
+        <h1 className="display-4">
           ClubConnect
         </h1>
         <div className="d-flex flex-column gap-3">
