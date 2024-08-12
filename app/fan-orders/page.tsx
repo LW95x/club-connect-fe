@@ -5,6 +5,8 @@ import { Alert, Button } from "react-bootstrap";
 import { fetchFanOrders, getEventById } from "@/utils/api";
 import { OrderWithEvent } from "@/interfaces/interfaces";
 import { useRouter } from "next/navigation";
+import Lottie from "lottie-react";
+import footballAnimation from "../_lib/football.json";
 
 export default function FanOrders() {
   const [orders, setOrders] = useState<OrderWithEvent[]>([]);
@@ -22,6 +24,7 @@ export default function FanOrders() {
 
   useEffect(() => {
     if (fanId) {
+      setIsLoading(true);
       fetchFanOrders(fanId)
         .then((orderList) => {
           if (orderList.length > 0) {
@@ -42,33 +45,34 @@ export default function FanOrders() {
         })
         .then((ordersWithEvents) => {
           setOrders(ordersWithEvents);
-          setIsLoading(false);
         })
         .catch((error) => {
           console.error(error);
           setIsError("Failed to fetch orders for this Fan ID.");
+        })
+        .finally(() => {
           setIsLoading(false);
         })
-    } else {
-      setIsLoading(false);
     }
   }, [fanId]);
 
   if (isLoading) {
     return (
-      <>
-        <Alert variant="secondary" style={{ textAlign: "center" }}>
-          Loading...
-        </Alert>
-      </>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
+    </div>
     );
+  }
+
+  if (isError) {
+    return <Alert variant="danger">{isError}</Alert>;
   }
 
   return (
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
       <h1
         className="display-4"
-        onClick={() => router.push("/home-fan")}
+        onClick={() => { router.push("/home-fan"); setIsLoading(true); }}
         style={{ cursor: "pointer", textDecoration: "none" }}
         onMouseEnter={(e) =>
           (e.currentTarget.style.textDecoration = "underline")
@@ -78,19 +82,17 @@ export default function FanOrders() {
         ClubConnect
       </h1>
       <h3 className="display-12">Your Orders</h3>
-      <div>
         <ul className="list-unstyled d-flex flex-column align-items-center">
-          {orders.length > 0 ? (
-            orders.map((order) => (
+            {orders.map((order) => (
               <li
                 key={order.order_id}
-                className="my-2 w-200"
-                style={{ maxWidth: "600px" }}
+                className="my-2"
+                style={{ maxWidth: "600px", width: "100%" }}
               >
                 <Button
                   variant="light"
                   className="w-100 p-3 border rounded shadow-sm"
-                  style={{ textAlign: "center" }}
+                  style={{ textAlign: "center", width: "100%" }}
                 >
                   <div className="fw-bold mb-2">
                     {order.title}
@@ -121,13 +123,9 @@ export default function FanOrders() {
                   </div>
                 </Button>
               </li>
-            ))
-          ) : (
-            <p>Loading orders...</p>
-          )}
+            ))}
         </ul>
-        {isError && <h3 style={{ color: "red" }}>{isError}</h3>}
-      </div>
     </div>
+
   );
 }

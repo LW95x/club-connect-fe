@@ -5,6 +5,8 @@ import { Alert, Button } from "react-bootstrap";
 import { Club } from "@/interfaces/interfaces";
 import { getClubById, updateClub, updateClubPassword } from "@/utils/api";
 import { useRouter } from "next/navigation";
+import Lottie from "lottie-react";
+import footballAnimation from "../_lib/football.json";
 
 export default function ClubProfile() {
   const [club, setClub] = useState<Club>();
@@ -87,11 +89,9 @@ export default function ClubProfile() {
 
   if (isLoading) {
     return (
-      <>
-        <Alert variant="secondary" style={{ textAlign: "center" }}>
-          Loading...
-        </Alert>
-      </>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
+    </div>
     );
   }
 
@@ -101,7 +101,7 @@ export default function ClubProfile() {
         {" "}
         <h1
           className="display-4"
-          onClick={() => router.push("/home-club")}
+          onClick={() => { router.push("/home-club"); setIsLoading(true); }}
           style={{ cursor: "pointer", textDecoration: "none" }}
           onMouseEnter={(e) =>
             (e.currentTarget.style.textDecoration = "underline")
@@ -122,7 +122,6 @@ export default function ClubProfile() {
             id="currentpassword"
             className="form-control"
             placeholder="Enter your current password"
-            pattern="^(?=.*\d)(?=.*[A-Z]).{8,16}$"
             required
             onChange={(e) => setCurrentPassword(e.target.value)}
           />
@@ -180,6 +179,7 @@ export default function ClubProfile() {
             type="text"
             id="location"
             className="form-control"
+            minLength={10}
             value={club?.location || ""}
             onChange={(e) => setClub({ ...club, location: e.target.value })}
           />
@@ -195,6 +195,7 @@ export default function ClubProfile() {
             type="tel"
             id="phonenumber"
             className="form-control"
+            minLength={10}
             value={club?.phone_number || ""}
             onChange={(e) => setClub({ ...club, phone_number: e.target.value })}
           />
@@ -208,6 +209,7 @@ export default function ClubProfile() {
             type="text"
             id="clubname"
             className="form-control"
+            minLength={5}
             value={club?.club_name || ""}
             onChange={(e) => setClub({ ...club, club_name: e.target.value })}
           />
@@ -221,6 +223,7 @@ export default function ClubProfile() {
             type="text"
             id="league"
             className="form-control"
+            minLength={5}
             value={club?.league || ""}
             onChange={(e) => setClub({ ...club, league: e.target.value })}
           />
@@ -233,6 +236,7 @@ export default function ClubProfile() {
             type="text"
             id="capacity"
             className="form-control"
+            min="1"
             value={club?.stadium_capacity || ""}
             onChange={(e) =>
               setClub({ ...club, stadium_capacity: parseInt(e.target.value) })
@@ -244,7 +248,7 @@ export default function ClubProfile() {
             Website <p style={{ fontSize: "12px" }}>(optional)</p>
           </label>
           <input
-            type="text"
+            type="url"
             id="website"
             className="form-control"
             placeholder="Enter your new website address"
@@ -257,7 +261,7 @@ export default function ClubProfile() {
             Facebook <p style={{ fontSize: "12px" }}>(optional)</p>
           </label>
           <input
-            type="text"
+            type="url"
             id="facebook"
             className="form-control"
             placeholder="Enter your new facebook address"
@@ -270,7 +274,7 @@ export default function ClubProfile() {
             Twitter <p style={{ fontSize: "12px" }}>(optional)</p>
           </label>
           <input
-            type="text"
+            type="url"
             id="twitter"
             className="form-control"
             placeholder="Enter your new twitter address"

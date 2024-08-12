@@ -5,6 +5,8 @@ import { Alert, Button } from "react-bootstrap";
 import { fetchAllClubEvents, fetchFanOrders } from "@/utils/api";
 import { Event } from "@/interfaces/interfaces";
 import { useRouter } from "next/navigation";
+import Lottie from "lottie-react";
+import footballAnimation from "../_lib/football.json";
 
 export default function ClubMatches() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -22,6 +24,7 @@ export default function ClubMatches() {
 
   useEffect(() => {
     if (clubId) {
+      setIsLoading(true);
       fetchAllClubEvents(clubId)
         .then((res) => {
           if (res.length > 0) {
@@ -37,19 +40,14 @@ export default function ClubMatches() {
         .finally(() => {
           setIsLoading(false);
         });
-    } else {
-      setIsError("Club ID is missing.");
-      setIsLoading(false);
     }
   }, [clubId]);
 
   if (isLoading) {
     return (
-      <>
-        <Alert variant="secondary" style={{ textAlign: "center" }}>
-          Loading...
-        </Alert>
-      </>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
+    </div>
     );
   }
 
@@ -57,7 +55,7 @@ export default function ClubMatches() {
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
       <h1
         className="display-4"
-        onClick={() => router.push("/home-club")}
+        onClick={() => { router.push("/home-club"); setIsLoading(true); }}
         style={{ cursor: "pointer", textDecoration: "none" }}
         onMouseEnter={(e) =>
           (e.currentTarget.style.textDecoration = "underline")
@@ -68,8 +66,7 @@ export default function ClubMatches() {
       </h1>
       <h3 className="display-12">My Matches</h3>
       <ul className="list-unstyled d-flex flex-column align-items-center">
-        {events.length > 0 ? (
-          events.map((event) => (
+          {events.map((event) => (
             <li
               key={event.event_id}
               className="my-2 w-100"
@@ -79,7 +76,7 @@ export default function ClubMatches() {
                 variant="light"
                 className="w-100 p-3 border rounded shadow-sm"
                 style={{ textAlign: "center" }}
-                onClick={() => router.push(`/update-match/${event.event_id}`)}
+                onClick={() => { router.push(`/update-match/${event.event_id}`); setIsLoading(true);}}
               >
                 <div className="fw-bold mb-2">{event.title}</div>
                 <div className="text-muted mb-2">{event.description}</div>
@@ -98,10 +95,7 @@ export default function ClubMatches() {
                 </div>
               </Button>
             </li>
-          ))
-        ) : (
-          <p>Loading club matches...</p>
-        )}
+          ))}
       </ul>
     </div>
   );

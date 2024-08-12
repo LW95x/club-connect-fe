@@ -5,6 +5,8 @@ import { Alert, Button } from "react-bootstrap";
 import { fetchAllClubEvents, getClubById } from "@/utils/api";
 import { Event, Club } from "@/interfaces/interfaces";
 import { useRouter } from "next/navigation";
+import Lottie from "lottie-react";
+import footballAnimation from "../../_lib/football.json";
 
 export default function ClubMatches({
   params,
@@ -41,9 +43,9 @@ export default function ClubMatches({
 
   if (isLoading) {
     return (
-      <Alert variant="secondary" style={{ textAlign: "center" }}>
-        Loading...
-      </Alert>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
+    </div>
     );
   }
 
@@ -59,7 +61,7 @@ export default function ClubMatches({
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
       <h1
         className="display-4"
-        onClick={() => router.push("/home-fan")}
+        onClick={() => { router.push("/home-fan"); setIsLoading(true);}}
         style={{ cursor: "pointer", textDecoration: "none" }}
         onMouseEnter={(e) => (e.currentTarget.style.textDecoration = "underline")}
         onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
@@ -78,7 +80,8 @@ export default function ClubMatches({
               variant="light"
               className="w-100 p-3 border rounded shadow-sm"
               style={{ textAlign: "center" }}
-              onClick={() => (window.location.href = `/events/${event.event_id}`)}
+              onClick={() => { router.push(`/events/${event.event_id}`); setIsLoading(true); }   
+            }
             >
               <div className="fw-bold mb-2">{event.title}</div>
               <div className="text-muted mb-2">{event.description}</div>

@@ -5,11 +5,13 @@ import { Alert, Button } from "react-bootstrap";
 import { getEventById, postNewOrder, updateEvent } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { Event } from "@/interfaces/interfaces";
+import Lottie from "lottie-react";
+import footballAnimation from "../../_lib/football.json";
 
 export default function SingleMatch({ params }: { params: { id: string } }) {
   const [event, setEvent] = useState<Event>();
   const [isLoading, setIsLoading] = useState(true);
-  const [isSuccess, setIsSuccess] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState("");
   const [addToCalendar, setAddToCalendar] = useState(false);
   const [quantity, setQuantity] = useState(1);
@@ -43,30 +45,41 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
         })
         .catch((error) => {
           console.error(error);
+          setIsLoading(false);
         });
     }
   }, [id]);
 
   if (isLoading) {
     return (
-      <>
-        <Alert variant="secondary" style={{ textAlign: "center" }}>
-          Loading...
-        </Alert>
-      </>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <Lottie
+          animationData={footballAnimation}
+          loop={true}
+          style={{ width: 300, height: 300 }}
+        />
+      </div>
     );
   }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    setIsSuccess("");
+    setIsSuccess(false);
     setIsError("");
 
     if (addToCalendar && (!token || isTokenExpired)) {
       handleAddToCalendar();
       return;
     }
+
     if (fanId) {
       postNewOrder(
         fanId,
@@ -76,7 +89,7 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
         parseInt(event?.price ?? "0") * quantity,
         "Pending",
         addToCalendar,
-        token || ''
+        token || ""
       ).then((res) => {
         if (res.ok && event) {
           updateEvent(
@@ -84,7 +97,7 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
             id,
             event.available_tickets ?? 0 - quantity
           );
-          setIsSuccess("Order succesfully created.");
+          setIsSuccess(true);
           setIsLoading(false);
           return res.json();
         } else if (res.ok === false) {
@@ -98,7 +111,12 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
   const handleAddToCalendar = () => {
     const clientId =
       "610240236325-tvtkgptkdqdsfoli9ra2eahiscs23pl8.apps.googleusercontent.com";
-    const redirectUri = "https://clubconnects.netlify.app/callback";
+
+    const redirectUri =
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000/callback"
+        : "https://clubconnects.netlify.app/callback";
+
     const scope = "https://www.googleapis.com/auth/calendar.events";
 
     localStorage.setItem("lastPage", window.location.pathname);
@@ -110,7 +128,10 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
       <h1
         className="display-4"
-        onClick={() => router.push("/home-fan")}
+        onClick={() => {
+          router.push("/home-fan");
+          setIsLoading(true);
+        }}
         style={{ cursor: "pointer", textDecoration: "none" }}
         onMouseEnter={(e) =>
           (e.currentTarget.style.textDecoration = "underline")
@@ -152,9 +173,35 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
 
       <form
         onSubmit={handleSubmit}
-        className="w-50"
-        style={{ maxWidth: "400px" }}
+        className="w-100"
+        style={{ maxWidth: "600px" }}
       >
+        <div className="mb-3 p-2 rounded bg-dark text-light text-center">
+          <label className="form-check-label">
+            Add to Google Calendar?
+            <input
+              type="checkbox"
+              className="form-check-input p-1"
+              style={{ marginLeft: "12px" }}
+              checked={addToCalendar}
+              onChange={(e) => setAddToCalendar(e.target.checked)}
+            />
+          </label>
+        </div>
+        {token && !isTokenExpired ? (
+            <Alert className="bg-success text-center text-white rounded">
+              You are successfully authenticated with Google Calendar.
+              If you choose to tick "Add to Google Calendar", the order will be
+              saved to your Google Calendar.
+            </Alert>
+          ) : (
+            <Alert className="bg-dark text-center text-white rounded">
+              You are not currently authenticated with Google Calendar, if you
+              choose to tick "Add to Google Calendar", you will be prompted to
+              authenticate to allow ClubConnect access to add the event to your Google
+              Calendar.{" "}
+            </Alert>
+          )}
         <div className="d-flex justify-content-center align-items-center">
           <input
             type="number"
@@ -171,22 +218,20 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
           </button>
         </div>
         <div className="mt-3 p-2 rounded bg-dark text-light text-center">
-          <label className="form-check-label">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              checked={addToCalendar}
-              onChange={(e) => setAddToCalendar(e.target.checked)}
-            />{" "}
-            Add to Google Calendar?
-          </label>
+          <b>Total Price:</b>{" "}
+          <i>£{quantity * (parseInt(event?.price ?? "0") || 0)}.00</i>
         </div>
-        <div className="mt-3 mb-2 bg-success">
-          {isSuccess && <span className="text-success">{isSuccess}</span>}
-          {isError && <span className="text-danger">{isError}</span>}
-        </div>
-        <div className="mt-3 p-2 rounded bg-dark text-light text-center">
-        Total Price: £{quantity * (parseInt(event?.price ?? "0") || 0)}.00
+        <div className="mt-3 mb-2">
+          {isSuccess ? (
+            <Alert className="bg-success text-center text-white rounded">
+              Your order has been successfully created.
+            </Alert>
+          ) : null}
+          {isError ? (
+            <Alert className="bg-danger text-center text-white rounded">
+              An error occurred, please try again or reload the page.
+            </Alert>
+          ) : null}
         </div>
       </form>
     </div>

@@ -5,6 +5,8 @@ import { Alert, Button } from "react-bootstrap";
 import { fetchAllClubs } from "@/utils/api";
 import { Club } from "@/interfaces/interfaces";
 import { useRouter } from "next/navigation";
+import Lottie from "lottie-react";
+import footballAnimation from "../_lib/football.json";
 
 export default function ClubFinder() {
   const [clubs, setClubs] = useState<Club[]>([]);
@@ -20,11 +22,9 @@ export default function ClubFinder() {
 
   if (isLoading) {
     return (
-      <>
-        <Alert variant="secondary" style={{ textAlign: "center" }}>
-          Loading...
-        </Alert>
-      </>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
+    </div>
     );
   }
 
@@ -32,7 +32,7 @@ export default function ClubFinder() {
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
       <h1
         className="display-4"
-        onClick={() => router.push("/home-fan")}
+        onClick={() => { router.push("/home-fan"); setIsLoading(true); }}
         style={{ cursor: "pointer", textDecoration: "none" }}
         onMouseEnter={(e) =>
           (e.currentTarget.style.textDecoration = "underline")
@@ -53,8 +53,7 @@ export default function ClubFinder() {
               variant="light"
               className="w-100 p-3 border rounded shadow-sm"
               style={{ textAlign: "center" }}
-              onClick={() =>
-                (window.location.href = `/club-matches/${club.club_id}`)
+              onClick={() => { router.push(`/club-matches/${club.club_id}`); setIsLoading(true); }   
               }
             >
               <div className="fw-bold">{club.club_name}</div>

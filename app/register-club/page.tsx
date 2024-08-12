@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { postNewClub } from "@/utils/api";
 import { Alert } from "react-bootstrap";
 import { useRouter } from "next/navigation";
+import Lottie from "lottie-react";
+import footballAnimation from "../_lib/football.json";
 
 export default function RegisterClub() {
   const [username, setUsername] = useState("");
@@ -20,6 +22,7 @@ export default function RegisterClub() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState("");
   const router = useRouter();
+  
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,18 +57,26 @@ export default function RegisterClub() {
 
   if (isLoading) {
     return (
-      <>
-        <Alert variant="secondary" style={{ textAlign: "center" }}>
-          Loading...
-        </Alert>
-      </>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
+    </div>
     );
   }
 
   return (
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
       <div className="text-center">
-        <h1 className="display-4">ClubConnect</h1>
+      <h1
+          className="display-4"
+          onClick={() => { router.push("/"); setIsLoading(true); }}
+          style={{ cursor: "pointer", textDecoration: "none" }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.textDecoration = "underline")
+          }
+          onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
+        >
+          ClubConnect
+        </h1>
         <h3 className="display-12">Register (Club)</h3>
       </div>
       <p style={{ color: "red" }}>{isSuccess}</p>
@@ -84,6 +95,7 @@ export default function RegisterClub() {
             id="username"
             className="form-control"
             placeholder="Enter your username"
+            minLength={5}
             required
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -130,6 +142,7 @@ export default function RegisterClub() {
             id="clubname"
             className="form-control"
             placeholder="Enter your club name"
+            minLength={5}
             required
             onChange={(e) => setClubName(e.target.value)}
           />
@@ -144,6 +157,7 @@ export default function RegisterClub() {
             id="league"
             className="form-control"
             placeholder="Enter your league"
+            minLength={5}
             required
             onChange={(e) => setLeague(e.target.value)}
           />
@@ -160,6 +174,7 @@ export default function RegisterClub() {
             id="address"
             className="form-control"
             placeholder="Enter your address"
+            minLength={10}
             required
             onChange={(e) => setLocation(e.target.value)}
           />
@@ -176,6 +191,7 @@ export default function RegisterClub() {
             id="phonenumber"
             className="form-control"
             placeholder="Enter your phone number"
+            minLength={10}
             required
             onChange={(e) => setPhoneNumber(e.target.value)}
           />

@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { getFanById, updateFanPassword, updateFan } from "@/utils/api";
 import { Fan } from "@/interfaces/interfaces";
 import { Alert, Button } from "react-bootstrap";
+import Lottie from "lottie-react";
+import footballAnimation from "../_lib/football.json";
 
 export default function FanProfile() {
   const [fan, setFan] = useState<Fan>();
@@ -82,11 +84,9 @@ export default function FanProfile() {
 
   if (isLoading) {
     return (
-      <>
-        <Alert variant="secondary" style={{ textAlign: "center" }}>
-          Loading...
-        </Alert>
-      </>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
+    </div>
     );
   }
 
@@ -96,7 +96,7 @@ export default function FanProfile() {
         {" "}
         <h1
           className="display-4"
-          onClick={() => router.push("/home-fan")}
+          onClick={() => {router.push("/home-fan"); setIsLoading(true); }}
           style={{ cursor: "pointer", textDecoration: "none" }}
           onMouseEnter={(e) =>
             (e.currentTarget.style.textDecoration = "underline")
@@ -117,7 +117,6 @@ export default function FanProfile() {
             id="currentpassword"
             className="form-control"
             placeholder="Enter your current password"
-            pattern="^(?=.*\d)(?=.*[A-Z]).{8,16}$"
             required
             onChange={(e) => setCurrentPassword(e.target.value)}
           />
@@ -187,6 +186,7 @@ export default function FanProfile() {
             type="text"
             id="address"
             className="form-control"
+            minLength={10}
             value={fan?.address}
             onChange={(e) => setFan({ ...fan, address: e.target.value })}
           />
@@ -202,6 +202,7 @@ export default function FanProfile() {
             type="tel"
             id="phonenumber"
             className="form-control"
+            minLength={10}
             value={fan?.phone_number}
             onChange={(e) => setFan({ ...fan, phone_number: e.target.value })}
           />

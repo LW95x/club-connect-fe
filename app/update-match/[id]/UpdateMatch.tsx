@@ -5,6 +5,8 @@ import { Alert, Button } from "react-bootstrap";
 import { getEventById, updateEvent } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { Event } from "@/interfaces/interfaces";
+import Lottie from "lottie-react";
+import footballAnimation from "../../_lib/football.json";
 
 export default function UpdateMatch({ params }: { params: { id: string } }) {
   const [event, setEvent] = useState<Event>();
@@ -64,11 +66,9 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
 
   if (isLoading) {
     return (
-      <>
-        <Alert variant="secondary" style={{ textAlign: "center" }}>
-          Loading...
-        </Alert>
-      </>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
+    </div>
     );
   }
 
@@ -78,7 +78,7 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
         {" "}
         <h1
           className="display-4"
-          onClick={() => router.push("/home-club")}
+          onClick={() => { router.push("/home-club"); setIsLoading(true); }}
           style={{ cursor: "pointer", textDecoration: "none" }}
           onMouseEnter={(e) =>
             (e.currentTarget.style.textDecoration = "underline")
@@ -98,11 +98,13 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
         <div className="form-group mb-3">
           <label htmlFor="matchtitle" className="form-label">
             Title
+            <p style={{ fontSize: "12px" }}>(minimum length of 5 characters)</p>
           </label>
           <input
             type="text"
             id="matchtitle"
             className="form-control"
+            minLength={5}
             value={event?.title}
             onChange={(e) => setEvent({ ...event, title: e.target.value })}
           />
@@ -110,11 +112,15 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
         <div className="form-group mb-3">
           <label htmlFor="location" className="form-label">
             Location
+            <p style={{ fontSize: "12px" }}>
+              (minimum length of 10 characters)
+            </p>
           </label>
           <input
             type="text"
             id="matchlocation"
             className="form-control"
+            minLength={10}
             value={event?.location}
             onChange={(e) => setEvent({ ...event, location: e.target.value })}
           />
@@ -140,6 +146,7 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
             type="datetime-local"
             id="date"
             className="form-control"
+            min={new Date().toISOString().slice(0, 16)} 
             value={event?.date_time?.split(".")[0]}
             onChange={(e) => setEvent({ ...event, date_time: e.target.value })}
           />
@@ -147,11 +154,15 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
         <div className="form-group mb-3">
           <label htmlFor="description" className="form-label">
             Description
+            <p style={{ fontSize: "12px" }}>
+              (minimum length of 10 characters)
+            </p>
           </label>
           <input
             type="text"
             id="description"
             className="form-control"
+            minLength={10}
             value={event?.description}
             onChange={(e) =>
               setEvent({ ...event, description: e.target.value })
@@ -166,6 +177,7 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
             type="number"
             id="tickets"
             className="form-control"
+            min="0"
             value={event?.available_tickets}
             onChange={(e) =>
               setEvent({

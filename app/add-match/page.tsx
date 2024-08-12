@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter } from "next/navigation";
 import { Alert } from "react-bootstrap";
 import { postNewEvent } from "@/utils/api";
+import Lottie from "lottie-react";
+import footballAnimation from "../_lib/football.json";
 
 export default function AddMatch() {
   const router = useRouter();
@@ -56,11 +58,9 @@ export default function AddMatch() {
 
   if (isLoading) {
     return (
-      <>
-        <Alert variant="secondary" style={{ textAlign: "center" }}>
-          Loading...
-        </Alert>
-      </>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
+    </div>
     );
   }
 
@@ -70,7 +70,7 @@ export default function AddMatch() {
         {" "}
         <h1
           className="display-4"
-          onClick={() => router.push("/home-club")}
+          onClick={() => { router.push("/home-club"); setIsLoading(true); }}
           style={{ cursor: "pointer", textDecoration: "none" }}
           onMouseEnter={(e) =>
             (e.currentTarget.style.textDecoration = "underline")
@@ -97,7 +97,8 @@ export default function AddMatch() {
             id="title"
             className="form-control"
             placeholder="Enter your match title"
-            required
+            minLength={5}
+            required 
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
@@ -113,6 +114,7 @@ export default function AddMatch() {
             id="matchlocation"
             className="form-control"
             placeholder="Enter your match location"
+            minLength={10}
             required
             onChange={(e) => setLocation(e.target.value)}
           />
@@ -139,6 +141,7 @@ export default function AddMatch() {
             type="datetime-local"
             id="date"
             className="form-control"
+            min={new Date().toISOString().slice(0, 16)} 
             required
             onChange={(e) => setDateTime(e.target.value)}
           />
@@ -155,6 +158,7 @@ export default function AddMatch() {
             id="description"
             className="form-control"
             placeholder="Enter your match description"
+            minLength={10}
             required
             onChange={(e) => setDescription(e.target.value)}
           />
@@ -168,6 +172,7 @@ export default function AddMatch() {
             id="tickets"
             className="form-control"
             placeholder="Enter the number of available tickets"
+            min="1"
             required
             onChange={(e) => setAvailableTickets(parseInt(e.target.value))}
           />

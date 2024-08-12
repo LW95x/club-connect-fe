@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { fetchAllClubs, postLoginClub } from "@/utils/api";
 import { Alert } from "react-bootstrap";
 import { useRouter } from "next/navigation";
+import Lottie from "lottie-react";
+import footballAnimation from "../_lib/football.json";
 
 export default function LoginClub() {
   const [username, setUsername] = useState("");
@@ -34,18 +36,26 @@ export default function LoginClub() {
 
   if (isLoading) {
     return (
-      <>
-        <Alert variant="secondary" style={{ textAlign: "center" }}>
-          Loading...
-        </Alert>
-      </>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
+    </div>
     );
   }
 
   return (
     <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
       <div className="text-center">
-        <h1 className="display-4">ClubConnect</h1>
+      <h1
+          className="display-4"
+          onClick={() => { router.push("/"); setIsLoading(true); }}
+          style={{ cursor: "pointer", textDecoration: "none" }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.textDecoration = "underline")
+          }
+          onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
+        >
+          ClubConnect
+        </h1>
         <h3 className="display-12">Login (Club)</h3>
       </div>
       <p style={{ color: "red" }}>{isSuccess}</p>

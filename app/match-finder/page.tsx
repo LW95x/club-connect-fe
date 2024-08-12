@@ -5,6 +5,8 @@ import { Alert, Button } from "react-bootstrap";
 import { fetchAllEvents } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { Event } from "@/interfaces/interfaces";
+import Lottie from "lottie-react";
+import footballAnimation from "../_lib/football.json";
 
 export default function MatchFinder() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -20,11 +22,9 @@ export default function MatchFinder() {
 
   if (isLoading) {
     return (
-      <>
-        <Alert variant="secondary" style={{ textAlign: "center" }}>
-          Loading...
-        </Alert>
-      </>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
+    </div>
     );
   }
 
@@ -32,7 +32,7 @@ export default function MatchFinder() {
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
       <h1
         className="display-4"
-        onClick={() => router.push("/home-fan")}
+        onClick={() => { router.push("/home-fan"); setIsLoading(true); }}
         style={{ cursor: "pointer", textDecoration: "none" }}
         onMouseEnter={(e) =>
           (e.currentTarget.style.textDecoration = "underline")
