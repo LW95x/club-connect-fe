@@ -14,15 +14,19 @@ export default function ClubMatches() {
   const [isError, setIsError] = useState("");
   const router = useRouter();
   const [clubId, setClubId] = useState<string | null>(null);
+  const [isClubIdLoaded, setIsClubIdLoaded] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedClubId = localStorage.getItem('club_id');
       setClubId(storedClubId);
+      setIsClubIdLoaded(true);
     }
   }, []);
 
   useEffect(() => {
+    if (!isClubIdLoaded) return;
+
     if (clubId) {
       setIsLoading(true);
       fetchAllClubEvents(clubId)
@@ -30,24 +34,32 @@ export default function ClubMatches() {
           if (res.length > 0) {
             setEvents(res);
           } else {
+            setIsLoading(false);
             setIsError("No orders found for this Club ID.");
           }
         })
         .catch((error) => {
           console.error(error);
-          setIsError("Failed to fetch orders for this Club ID.");
+          setIsLoading(false);
+          setIsError("No orders found for this Club ID.");
         })
         .finally(() => {
           setIsLoading(false);
         });
+    } else {
+      setIsLoading(false);
+      setIsError(`Your Club ID could not be found, please log back in from the home page.`);
     }
-  }, [clubId]);
+  }, [clubId, isClubIdLoaded]);
 
   if (isLoading) {
     return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
-    </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
+          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+        </div>
+      </div>
     );
   }
 
@@ -65,6 +77,11 @@ export default function ClubMatches() {
         ClubConnect
       </h1>
       <h3 className="display-12">My Matches</h3>
+      {isError != "" ? (
+            <Alert className="bg-danger text-center text-white rounded">
+              {isError}
+            </Alert>
+          ) : null}
       <ul className="list-unstyled d-flex flex-column align-items-center">
           {events.map((event) => (
             <li
@@ -74,25 +91,30 @@ export default function ClubMatches() {
             >
               <Button
                 variant="light"
-                className="w-100 p-3 border rounded shadow-sm"
+                className="w-100 p-3 border rounded shadow-sm text-start"
                 style={{ textAlign: "center" }}
                 onClick={() => { router.push(`/update-match/${event.event_id}`); setIsLoading(true);}}
               >
-                <div className="fw-bold mb-2">{event.title}</div>
-                <div className="text-muted mb-2">{event.description}</div>
-                <div className="text-muted mb-2">Price - £{event.price}</div>
+                <h5 className="fw-bold mb-3 text-center">{event.title}</h5>
+                <div className="text-muted mb-3 text-center">{event.description}</div>
+                <hr/>
+                <div className="text-muted mb-2"><b>Price:</b> £{event.price}</div>
                 <div className="text-muted mb-2">
-                  Location - {event.location}
+                  <b>Location:</b> {event.location}
                 </div>
                 <div className="text-muted mb-2">
-                  Date - {event.date_time?.split("T")[0]}
+                  <b>Date:</b> {event.date_time?.split("T")[0]}
                 </div>
                 <div className="text-muted mb-2">
-                  Time - {event.date_time?.split("T")[1].slice(0,5)}
+                  <b>Time:</b> {event.date_time?.split("T")[1].slice(0,5)}
                 </div>
                 <div className="text-muted mb-2">
-                  Available Tickets - {event.available_tickets}
+                  <b>Available Tickets:</b> {event.available_tickets}
                 </div>
+                <hr/>
+                <div className="text-muted mb-2 text-end">
+                <b>Update Match -&gt;</b>
+              </div>
               </Button>
             </li>
           ))}

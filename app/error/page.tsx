@@ -12,9 +12,12 @@ export default function Error() {
 
   if (isLoading) {
     return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
-    </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
+          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+        </div>
+      </div>
     );
   }
 

@@ -15,7 +15,7 @@ export default function RegisterFan() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState("");
+  const [isError, setIsError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -26,7 +26,7 @@ export default function RegisterFan() {
         if (res.ok) {
           return res.json();
         } else if (res.ok === false) {
-          setIsSuccess("One of the fields failed validation.");
+          setIsError("A database error occurred while creating your club account, please try again or reload the page.");
           setIsLoading(false);
         }
       })
@@ -39,9 +39,12 @@ export default function RegisterFan() {
 
   if (isLoading) {
     return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
-    </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
+          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+        </div>
+      </div>
     );
   }
 
@@ -61,7 +64,6 @@ export default function RegisterFan() {
         </h1>
         <h3 className="display-12">Register (Fan)</h3>
       </div>
-      <p style={{ color: "red" }}>{isSuccess}</p>
       <form
         className="w-100"
         style={{ maxWidth: "400px" }}
@@ -169,6 +171,13 @@ export default function RegisterFan() {
           </button>
         </div>
       </form>
+      <div className="mb-20">
+        {isError != "" ? (
+          <Alert className="bg-danger text-center text-white rounded">
+            {isError}
+          </Alert>
+        ) : null}
+      </div>
     </div>
   );
 }

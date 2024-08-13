@@ -16,7 +16,7 @@ export default function ClubMatches({
   const [events, setEvents] = useState<Event[]>([]);
   const [club, setClub] = useState<Club>();
   const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+  const [isError, setIsError] = useState("");
   const club_id = params.club_id;
   const router = useRouter();
 
@@ -31,8 +31,9 @@ export default function ClubMatches({
         setEvents(eventsData);
         setClub(clubData);
       } catch (error) {
-        console.error("Error fetching data:", error);
-        setIsError(true);
+        console.error(error);
+        setIsLoading(false);
+        setIsError("A database error occurred while fetching this clubs matches, please try again or reload the page.");
       } finally {
         setIsLoading(false);
       }
@@ -43,17 +44,12 @@ export default function ClubMatches({
 
   if (isLoading) {
     return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
-    </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <Alert variant="danger" style={{ textAlign: "center" }}>
-        Failed to load club information. Please try again later.
-      </Alert>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
+          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+        </div>
+      </div>
     );
   }
 
@@ -69,7 +65,12 @@ export default function ClubMatches({
         ClubConnect
       </h1>
       <h3 className="display-12">{club?.club_name} Matches</h3>
-      <ul className="list-unstyled d-flex flex-column align-items-center">
+      {isError != "" ? (
+            <Alert className="bg-danger text-center text-white rounded">
+              {isError}
+            </Alert>
+          ) : null}
+      <ul className="list-unstyled d-flex flex-column">
         {events.map((event) => (
           <li
             key={event.event_id}
@@ -78,20 +79,24 @@ export default function ClubMatches({
           >
             <Button
               variant="light"
-              className="w-100 p-3 border rounded shadow-sm"
-              style={{ textAlign: "center" }}
+              className="w-100 p-3 border rounded shadow-sm text-start"
               onClick={() => { router.push(`/events/${event.event_id}`); setIsLoading(true); }   
             }
             >
-              <div className="fw-bold mb-2">{event.title}</div>
-              <div className="text-muted mb-2">{event.description}</div>
-              <div className="text-muted mb-2">Price - £{event.price}</div>
-              <div className="text-muted mb-2">Location - {event.location}</div>
+              <h5 className="fw-bold mb-3 text-center">{event.title}</h5>
+              <div className="text-muted mb-3 text-center">{event.description}</div>
+              <hr/>
+              <div className="text-muted mb-2"><b>Price:</b> £{event.price}</div>
+              <div className="text-muted mb-2"><b>Location:</b> {event.location}</div>
               <div className="text-muted mb-2">
-                Date - {event.date_time?.split("T")[0]} @ {event.date_time?.split("T")[1].slice(0,5)}
+                <b>Date:</b> {event.date_time?.split("T")[0]} @ {event.date_time?.split("T")[1].slice(0,5)}
               </div>
               <div className="text-muted mb-2">
-                Available Tickets - {event.available_tickets}
+                <b>Available Tickets:</b> {event.available_tickets}
+              </div>
+              <hr/>
+              <div className="text-muted mb-2 text-end">
+                <b>Order Tickets -&gt;</b>
               </div>
             </Button>
           </li>

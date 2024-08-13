@@ -11,20 +11,29 @@ import footballAnimation from "../_lib/football.json";
 export default function MatchFinder() {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     fetchAllEvents().then((res) => {
       setEvents(res);
       setIsLoading(false);
-    });
+    })
+    .catch((error) => {
+      console.error(error);
+      setIsLoading(false);
+      setIsError("A database error occurred while fetching the matches, please try again or reload the page.");
+    })
   }, []);
 
   if (isLoading) {
     return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
-    </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
+          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+        </div>
+      </div>
     );
   }
 
@@ -42,6 +51,11 @@ export default function MatchFinder() {
         ClubConnect
       </h1>
       <h3 className="display-12">Match Finder</h3>
+      {isError != "" ? (
+            <Alert className="bg-danger text-center text-white rounded">
+              {isError}
+            </Alert>
+          ) : null}
       <ul className="list-unstyled d-flex flex-column align-items-center">
         {events.map((event) => (
           <li
@@ -49,23 +63,26 @@ export default function MatchFinder() {
             className="my-2 w-100"
             style={{ maxWidth: "600px" }}
           >
-            <Button
+                        <Button
               variant="light"
-              className="w-100 p-3 border rounded shadow-sm"
-              style={{ textAlign: "center" }}
-              onClick={() =>
-                (window.location.href = `/events/${event.event_id}`)
-              }
+              className="w-100 p-3 border rounded shadow-sm text-start"
+              onClick={() => { router.push(`/events/${event.event_id}`); setIsLoading(true); }   
+            }
             >
-              <div className="fw-bold mb-2">{event.title}</div>
-              <div className="text-muted mb-2">{event.description}</div>
-              <div className="text-muted mb-2">Price - £{event.price}</div>
-              <div className="text-muted mb-2">Location - {event.location}</div>
+              <h5 className="fw-bold mb-3 text-center">{event.title}</h5>
+              <div className="text-muted mb-3 text-center">{event.description}</div>
+              <hr/>
+              <div className="text-muted mb-2"><b>Price:</b> £{event.price}</div>
+              <div className="text-muted mb-2"><b>Location:</b> {event.location}</div>
               <div className="text-muted mb-2">
-                Date - {event.date_time?.split("T")[0]} @ {event.date_time?.split("T")[1].slice(0,5)}
+                <b>Date:</b> {event.date_time?.split("T")[0]} @ {event.date_time?.split("T")[1].slice(0,5)}
               </div>
               <div className="text-muted mb-2">
-                Available Tickets - {event.available_tickets}
+                <b>Available Tickets:</b> {event.available_tickets}
+              </div>
+              <hr/>
+              <div className="text-muted mb-2 text-end">
+                <b>Order Tickets -&gt;</b>
               </div>
             </Button>
           </li>

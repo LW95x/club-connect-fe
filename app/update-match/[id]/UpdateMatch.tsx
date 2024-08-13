@@ -32,6 +32,8 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
         setIsLoading(false);
       })
       .catch((error) => {
+        setIsLoading(false);
+        setIsError("This Match ID could not be found.")
         console.error(error);
       });
   }, [id]);
@@ -54,21 +56,27 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
       ).then((res) => {
         if (res.ok) {
           setIsLoading(false);
-          setIsSuccess("Event details succesfully updated.");
+          setIsSuccess("Match details succesfully updated.");
           return res.json();
         } else if (!res.ok) {
-          setIsError("Event update request failed.");
+          setIsError("A database error occurred while updating the match, please try again or reload the page.");
           setIsLoading(false);
         }
       });
+    } else {
+      setIsLoading(false);
+      setIsError(`Your Club ID could not be found, please log back in from the home page.`);
     }
   };
 
   if (isLoading) {
     return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
-    </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
+          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+        </div>
+      </div>
     );
   }
 
@@ -194,8 +202,16 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
         </div>
       </form>
       <div className="mt-2">
-        {isSuccess && <span className="text-success">{isSuccess}</span>}
-        {isError && <span className="text-danger">{isError}</span>}
+      {isSuccess != "" ? (
+            <Alert className="bg-success text-center text-white rounded">
+              {isSuccess}
+            </Alert>
+          ) : null}
+      {isError != "" ? (
+            <Alert className="bg-danger text-center text-white rounded">
+              {isError}
+            </Alert>
+          ) : null}
       </div>
     </div>
   );

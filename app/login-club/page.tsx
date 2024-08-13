@@ -11,12 +11,13 @@ export default function LoginClub() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState("");
+  const [isError, setIsError] = useState("");
   const router = useRouter();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    setIsError("");
     postLoginClub(username, password).then((res) => {
       if (res.ok === true) {
         fetchAllClubs().then((res: any) => {
@@ -28,7 +29,7 @@ export default function LoginClub() {
           router.push("/home-club");
         });
       } else if (res.ok === false) {
-        setIsSuccess("Invalid username or password.");
+        setIsError("Invalid username or password provided.");
         setIsLoading(false);
       }
     });
@@ -36,9 +37,12 @@ export default function LoginClub() {
 
   if (isLoading) {
     return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
-    </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
+          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+        </div>
+      </div>
     );
   }
 
@@ -58,7 +62,6 @@ export default function LoginClub() {
         </h1>
         <h3 className="display-12">Login (Club)</h3>
       </div>
-      <p style={{ color: "red" }}>{isSuccess}</p>
       <form
         className="w-100"
         style={{ maxWidth: "400px" }}
@@ -99,6 +102,11 @@ export default function LoginClub() {
           </button>
         </div>
       </form>
+      {isError != "" ? (
+            <Alert className="bg-danger text-center text-white rounded">
+              {isError}
+            </Alert>
+          ) : null}
     </div>
   );
 }

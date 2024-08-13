@@ -14,15 +14,19 @@ export default function FanOrders() {
   const [isError, setIsError] = useState("");
   const router = useRouter();
   const [fanId, setFanId] = useState<string | null>(null);
+  const [isFanIdLoaded, setIsFanIdLoaded] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedClubId = localStorage.getItem('fan_id');
       setFanId(storedClubId);
+      setIsFanIdLoaded(true);
     }
   }, []);
 
   useEffect(() => {
+    if (!isFanIdLoaded) return;
+
     if (fanId) {
       setIsLoading(true);
       fetchFanOrders(fanId)
@@ -40,33 +44,38 @@ export default function FanOrders() {
               }),
             );
           } else {
-            throw new Error("No orders found for this Fan ID.");
+            setIsLoading(false);
+            setIsError("No orders found for this Fan ID.");
           }
         })
         .then((ordersWithEvents) => {
-          setOrders(ordersWithEvents);
+          setOrders(ordersWithEvents || []);
         })
         .catch((error) => {
           console.error(error);
+          setIsLoading(false);
           setIsError("Failed to fetch orders for this Fan ID.");
         })
         .finally(() => {
           setIsLoading(false);
         })
+    } else {
+      setIsLoading(false);
+      setIsError(`Your Fan ID could not be found, please log back in from the home page.`);
     }
-  }, [fanId]);
+  }, [fanId, isFanIdLoaded]);
 
   if (isLoading) {
     return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
-    </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
+          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+        </div>
+      </div>
     );
   }
 
-  if (isError) {
-    return <Alert variant="danger">{isError}</Alert>;
-  }
 
   return (
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
@@ -82,7 +91,12 @@ export default function FanOrders() {
         ClubConnect
       </h1>
       <h3 className="display-12">Your Orders</h3>
-        <ul className="list-unstyled d-flex flex-column align-items-center">
+      {isError != "" ? (
+            <Alert className="bg-danger text-center text-white rounded">
+              {isError}
+            </Alert>
+          ) : null}
+        <ul className="list-unstyled d-flex flex-column">
             {orders.map((order) => (
               <li
                 key={order.order_id}
@@ -91,35 +105,38 @@ export default function FanOrders() {
               >
                 <Button
                   variant="light"
-                  className="w-100 p-3 border rounded shadow-sm"
+                  className="w-100 p-3 border rounded shadow-sm text-start"
                   style={{ textAlign: "center", width: "100%" }}
                 >
-                  <div className="fw-bold mb-2">
+                  <h5 className="fw-bold mb-3 text-center">
                     {order.title}
-                  </div>
-                  <div className="text-muted mb-2">{order.description}</div>
+                  </h5>
+                  <div className="text-muted mb-3 text-center">{order.description}</div>
+                  <hr/>
                   <div className="text-muted mb-2">
-                    Event Date - {order?.date_time?.split("T")[0] || ""} @{" "}
+                    <b>Event Date:</b> {order?.date_time?.split("T")[0] || ""} @{" "}
                     {order?.date_time?.split("T")[1].slice(0, 5) || ""}
                   </div>
                   <div className="text-muted mb-4">
-                    Location - {order.location}
+                    <b>Location:</b> {order.location}
                   </div>
-                  <div className="fw-bold mb-2">
+                  <hr />
+                  <div className="fw-bold mb-2 text-center">
                     Order Details
                   </div>
+                  <hr />
                   <div className="text-muted mb-2">
-                    Order Time & Date - {order.order_date.split("T")[0] || ""} @{" "}
+                    <b>Order Time & Date:</b> {order.order_date.split("T")[0] || ""} @{" "}
                     {order.order_date.split("T")[1].slice(0, 5) || ""}
                   </div>
                   <div className="text-muted mb-2">
-                    Quantity - {order.quantity} 
+                   <b>Quantity:</b> {order.quantity} 
                   </div>
                   <div className="text-muted mb-2">
-                  Total Price - £{order.total_price}
+                  <b>Total Price:</b> £{order.total_price}
                   </div>
                   <div className="text-muted mb-2">
-                    Order Status - <b>{order.order_status}</b>
+                    <b>Order Status:</b> <i>{order.order_status}</i>
                   </div>
                 </Button>
               </li>

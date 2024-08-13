@@ -46,25 +46,21 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
         .catch((error) => {
           console.error(error);
           setIsLoading(false);
+          setIsError("A database error occurred while fetching the event, please try again or reload the page.");
         });
+    } else {
+      setIsLoading(false);
+      setIsError("An error occurred fetching the event's ID, please try again or reload the page.");
     }
   }, [id]);
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "100vh",
-        }}
-      >
-        <Lottie
-          animationData={footballAnimation}
-          loop={true}
-          style={{ width: 300, height: 300 }}
-        />
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
+          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+        </div>
       </div>
     );
   }
@@ -101,10 +97,18 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
           setIsLoading(false);
           return res.json();
         } else if (res.ok === false) {
-          setIsError("Order failed, please try again.");
+          setIsError("A database error occurred while adding your order, please try again or reload the page.");
           setIsLoading(false);
         }
-      });
+      })
+      .catch((error) => {
+        console.error(error);
+        setIsError("A database error occurred while adding your order, please try again or reload the page.");
+        setIsLoading(false);
+      })
+    } else {
+      setIsLoading(false);
+      setIsError(`Your Fan ID could not be found, please log back in from the home page.`);
     }
   };
 
@@ -141,32 +145,27 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
         ClubConnect
       </h1>
       <h3 className="display-12">Order Tickets</h3>
-      <ul className="list-unstyled d-flex flex-column align-items-center">
+      <ul className="list-unstyled d-flex flex-column">
         <li
           key={event?.event_id}
-          className="my-2 w-100"
+          className="my-2 w-200"
           style={{ maxWidth: "600px" }}
         >
           <Button
-            variant="light"
-            className="w-100 p-3 border rounded shadow-sm"
-            style={{ textAlign: "center" }}
-          >
-            <div className="fw-bold mb-2">{event?.title}</div>
-            <div className="text-muted mb-2">Location - {event?.location}</div>
-            <div className="text-muted mb-2">
-              Ticket Price - £{event?.price}
-            </div>
-            <div className="text-muted mb-2">
-              Date & Time - {event?.date_time?.split("T")[0]} @{" "}
-              {event?.date_time?.split("T")[1].slice(0, 5)}
-            </div>
-            <div className="text-muted mb-2">
-              Description - {event?.description}
-            </div>
-            <div className="text-muted mb-2">
-              Available Tickets: {event?.available_tickets}
-            </div>
+              variant="light"
+              className="w-200 p-3 border rounded shadow-sm text-start"
+            >
+              <h5 className="fw-bold mb-3 text-center">{event?.title}</h5>
+              <div className="text-muted mb-3 text-center">{event?.description}</div>
+              <hr/>
+              <div className="text-muted mb-2"><b>Price:</b> £{event?.price}</div>
+              <div className="text-muted mb-2"><b>Location:</b> {event?.location}</div>
+              <div className="text-muted mb-2">
+                <b>Date:</b> {event?.date_time?.split("T")[0]} @ {event?.date_time?.split("T")[1].slice(0,5)}
+              </div>
+              <div className="text-muted mb-2">
+                <b>Available Tickets:</b> {event?.available_tickets}
+              </div>
           </Button>
         </li>
       </ul>
@@ -178,7 +177,7 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
       >
         <div className="mb-3 p-2 rounded bg-dark text-light text-center">
           <label className="form-check-label">
-            Add to Google Calendar?
+            Add to your Google Calendar?
             <input
               type="checkbox"
               className="form-check-input p-1"
@@ -219,7 +218,8 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
         </div>
         <div className="mt-3 p-2 rounded bg-dark text-light text-center">
           <b>Total Price:</b>{" "}
-          <i>£{quantity * (parseInt(event?.price ?? "0") || 0)}.00</i>
+          <i>£{isNaN(quantity * (parseInt(event?.price ?? "0") || 0)) ? 0 : quantity * (parseInt(event?.price ?? "0") || 0)}.00</i>
+
         </div>
         <div className="mt-3 mb-2">
           {isSuccess ? (
@@ -227,9 +227,9 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
               Your order has been successfully created.
             </Alert>
           ) : null}
-          {isError ? (
+          {isError != "" ? (
             <Alert className="bg-danger text-center text-white rounded">
-              An error occurred, please try again or reload the page.
+              {isError}
             </Alert>
           ) : null}
         </div>

@@ -20,9 +20,8 @@ export default function RegisterClub() {
   const [facebook, setFacebook] = useState("");
   const [twitter, setTwitter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState("");
+  const [isError, setIsError] = useState("");
   const router = useRouter();
-  
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,13 +37,15 @@ export default function RegisterClub() {
       phoneNumber,
       website,
       facebook,
-      twitter,
+      twitter
     )
       .then((res) => {
         if (res.ok) {
           return res.json();
         } else if (res.ok === false) {
-          setIsSuccess("One of the fields failed validation.");
+          setIsError(
+            "A database error occurred while creating your club account, please try again or reload the page."
+          );
           setIsLoading(false);
         }
       })
@@ -57,18 +58,46 @@ export default function RegisterClub() {
 
   if (isLoading) {
     return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
-    </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Lottie
+            animationData={footballAnimation}
+            loop={true}
+            style={{ width: 300, height: 300 }}
+          />
+          <p
+            className="lead display-6 mb-1 mt-5"
+            style={{ marginTop: "20px", marginLeft: "30px" }}
+          >
+            Loading...
+          </p>
+        </div>
+      </div>
     );
   }
 
   return (
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
       <div className="text-center">
-      <h1
+        <h1
           className="display-4"
-          onClick={() => { router.push("/"); setIsLoading(true); }}
+          onClick={() => {
+            router.push("/");
+            setIsLoading(true);
+          }}
           style={{ cursor: "pointer", textDecoration: "none" }}
           onMouseEnter={(e) =>
             (e.currentTarget.style.textDecoration = "underline")
@@ -79,7 +108,6 @@ export default function RegisterClub() {
         </h1>
         <h3 className="display-12">Register (Club)</h3>
       </div>
-      <p style={{ color: "red" }}>{isSuccess}</p>
       <form
         className="w-100"
         style={{ maxWidth: "400px" }}
@@ -255,6 +283,13 @@ export default function RegisterClub() {
           </button>
         </div>
       </form>
+      <div className="mb-20">
+        {isError != "" ? (
+          <Alert className="bg-danger text-center text-white rounded">
+            {isError}
+          </Alert>
+        ) : null}
+      </div>
     </div>
   );
 }

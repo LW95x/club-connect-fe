@@ -49,18 +49,24 @@ export default function AddMatch() {
           setIsLoading(false);
           return res.json();
         } else if (res.ok === false) {
-          setIsError("One of the fields failed validation.");
+          setIsError("A database error occurred while creating the match, please try again or reload the page.");
           setIsLoading(false);
         }
       });
+    } else {
+      setIsLoading(false);
+      setIsError(`Your Club ID could not be found, please log back in from the home page.`);
     }
   };
 
   if (isLoading) {
     return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
-    </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
+          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+        </div>
+      </div>
     );
   }
 
@@ -183,10 +189,18 @@ export default function AddMatch() {
           </button>
         </div>
       </form>
-      <div className="mt-2">
-        {isSuccess && <span className="text-success">{isSuccess}</span>}
-        {isError && <span className="text-danger">{isError}</span>}
-      </div>
+      <div className="mt-3 mb-2">
+          {isSuccess != "" ? (
+            <Alert className="bg-success text-center text-white rounded">
+              {isSuccess}
+            </Alert>
+          ) : null}
+          {isError != "" ? (
+            <Alert className="bg-danger text-center text-white rounded">
+              {isError}
+            </Alert>
+          ) : null}
+        </div>
     </div>
   );
 }

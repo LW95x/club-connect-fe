@@ -17,26 +17,37 @@ export default function ClubProfile() {
   const [isSuccess, setIsSuccess] = useState("");
   const router = useRouter();
   const [clubId, setClubId] = useState<string | null>(null);
+  const [isClubIdLoaded, setIsClubIdLoaded] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedClubId = localStorage.getItem('club_id');
       setClubId(storedClubId);
+      setIsClubIdLoaded(true);
     }
   }, []);
 
   useEffect(() => {
+    if (!isClubIdLoaded) return;
+
     if (clubId) {
       getClubById(clubId)
         .then((club) => {
           setClub(club);
           setIsLoading(false);
+          setIsSuccess("");
+          setIsError("");
         })
         .catch((error) => {
+          setIsLoading(false);
           console.error(error);
+          setIsError("Your Club ID could not be found, please log back in from the home page.")
         });
+    } else {
+      setIsLoading(false);
+      setIsError(`Your Club ID could not be found, please log back in from the home page.`);
     }
-  }, [clubId]);
+  }, [clubId, isClubIdLoaded]);
 
   const handlePasswordSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,10 +61,13 @@ export default function ClubProfile() {
         setIsSuccess("Password succesfully updated.");
         return res.json();
       } else if (res.ok === false) {
-        setIsError("Password request change failed.");
+        setIsError("Password request change failed - Incorrect current password provided.");
         setIsLoading(false);
       }
     });
+  } else {
+    setIsLoading(false);
+    setIsError(`Your Club ID could not be found, please log back in from the home page.`);
   }
   };
 
@@ -80,8 +94,8 @@ export default function ClubProfile() {
           setIsSuccess("User details succesfully updated.");
           return res.json();
         } else if (res.ok === false) {
-          setIsError("User update request failed.");
           setIsLoading(false);
+          setIsError("A database error occurred while attempting to update your club profile, please try again or reload the page.");
         }
       });
     }
@@ -89,9 +103,12 @@ export default function ClubProfile() {
 
   if (isLoading) {
     return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
-    </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
+          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+        </div>
+      </div>
     );
   }
 
@@ -149,12 +166,18 @@ export default function ClubProfile() {
           <button type="submit" className="btn btn-primary mb-2" style={{width: "300px"}}>
             Update Password
           </button>
-          <div className="mt-2">
-            {isSuccess && <span className="text-success">{isSuccess}</span>}
-            {isError && <span className="text-danger">{isError}</span>}
-          </div>
         </div>
       </form>
+      {isSuccess != "" ? (
+            <Alert className="bg-success text-center text-white rounded">
+              {isSuccess}
+            </Alert>
+          ) : null}
+      {isError != "" ? (
+            <Alert className="bg-danger text-center text-white rounded">
+              {isError}
+            </Alert>
+          ) : null}
       <form className="w-100 mt-10" onSubmit={handleSubmit}>
         <div className="form-group mb-3">
           <label htmlFor="email" className="form-label">

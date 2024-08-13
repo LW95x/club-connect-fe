@@ -17,15 +17,19 @@ export default function FanProfile() {
   const [isSuccess, setIsSuccess] = useState("");
   const router = useRouter();
   const [fanId, setFanId] = useState<string | null>(null);
+  const [isFanIdLoaded, setIsFanIdLoaded] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedFanId = localStorage.getItem("fan_id");
       setFanId(storedFanId);
+      setIsFanIdLoaded(true);
     }
   }, []);
 
   useEffect(() => {
+    if (!isFanIdLoaded) return;
+
     if (fanId) {
       getFanById(fanId)
         .then((fan) => {
@@ -34,9 +38,14 @@ export default function FanProfile() {
         })
         .catch((error) => {
           console.error(error);
+          setIsLoading(false);
+          setIsError("A database error occurred while attempting to fetch your profile data, please try again or reload the page.")
         });
+    } else {
+      setIsLoading(false);
+      setIsError(`Your Fan ID could not be found, please log back in from the home page.`);
     }
-  }, [fanId]);
+  }, [fanId, isFanIdLoaded]);
 
   const handlePasswordSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,10 +59,13 @@ export default function FanProfile() {
           setIsSuccess("Password succesfully updated.");
           return res.json();
         } else if (res.ok === false) {
-          setIsError("Password request change failed.");
+          setIsError("Password request change failed - Incorrect current password provided.");
           setIsLoading(false);
         }
       });
+    } else {
+      setIsLoading(false);
+      setIsError(`Your Fan ID could not be found, please log back in from the home page.`);
     }
   };
 
@@ -75,7 +87,7 @@ export default function FanProfile() {
           setIsSuccess("User details succesfully updated.");
           return res.json();
         } else if (res.ok === false) {
-          setIsError("User update request failed.");
+          setIsError("A database error occurred while attempting to update your club profile, please try again or reload the page.");
           setIsLoading(false);
         }
       });
@@ -84,9 +96,12 @@ export default function FanProfile() {
 
   if (isLoading) {
     return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }}/>
-    </div>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
+          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+        </div>
+      </div>
     );
   }
 
@@ -144,12 +159,18 @@ export default function FanProfile() {
           <button type="submit" className="btn btn-primary mb-2" style={{width: "300px"}}>
             Update Password
           </button>
-          <div className="mt-2">
-            {isSuccess && <span className="text-success">{isSuccess}</span>}
-            {isError && <span className="text-danger">{isError}</span>}
-          </div>
         </div>
       </form>
+      {isSuccess != "" ? (
+            <Alert className="bg-success text-center text-white rounded">
+              {isSuccess}
+            </Alert>
+          ) : null}
+      {isError != "" ? (
+            <Alert className="bg-danger text-center text-white rounded">
+              {isError}
+            </Alert>
+          ) : null}
       <form className="w-100 mt-10" onSubmit={handleSubmit}>
         <div className="form-group mb-3">
           <label htmlFor="dob" className="form-label">
