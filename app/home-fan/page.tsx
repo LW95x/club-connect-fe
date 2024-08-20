@@ -4,10 +4,29 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter } from "next/navigation";
 import Lottie from "lottie-react";
 import footballAnimation from "../_lib/football.json";
+import FanNavBar from "../_lib/FanNavBar";
 
 export default function HomeFan() {
   const [isLoading, setIsLoading] = useState(false);
+  const [clubId, setClubId] = useState<string | null>(null);
+  const [fanId, setFanId] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedClubId = localStorage.getItem("club_id");
+      const storedFanId = localStorage.getItem("fan_id");
+
+      if (!storedClubId && !storedFanId) {
+        router.push("/");
+      } else if (!storedFanId && storedClubId) {
+        router.push("/home-club");
+      } else if (storedFanId) {
+        setClubId(storedClubId);
+        setFanId(storedFanId);
+      }
+    }
+  }, [router]);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -27,12 +46,12 @@ export default function HomeFan() {
   }
 
   return (
-    <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
-      <div className="text-center">
-        <h1 className="display-4">
+    <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
+        <h1 className="display-4 mb-2">
           ClubConnect
         </h1>
-        <div className="d-flex flex-column gap-3">
+        <FanNavBar />
+        <div className="d-flex flex-column gap-3 w-50 mt-5">
           <button
             className="btn btn-outline-dark btn-lg"
             onClick={() => { router.push("/club-finder"); setIsLoading(true);}}
@@ -61,7 +80,15 @@ export default function HomeFan() {
             Logout Fan
           </button>
         </div>
+        <div className="container-fluid mt-5 p-0">
+    <img src="/nlfootball.jpg" alt="Non-League Football" className="img-fluid w-100 rounded" style={{
+      height: '350px', 
+      objectFit: 'cover', 
+      width: '100%',
+      position: 'fixed',
+      bottom: '0' 
+    }}/>
+  </div>
       </div>
-    </div>
   );
 }

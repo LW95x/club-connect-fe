@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Alert, Button } from "react-bootstrap";
+import { Alert, Button, Card } from "react-bootstrap";
 import { fetchFanOrders, getEventById } from "@/utils/api";
 import { OrderWithEvent } from "@/interfaces/interfaces";
 import { useRouter } from "next/navigation";
 import Lottie from "lottie-react";
 import footballAnimation from "../_lib/football.json";
+import FanNavBar from "../_lib/FanNavBar";
 
 export default function FanOrders() {
   const [orders, setOrders] = useState<OrderWithEvent[]>([]);
@@ -45,7 +46,7 @@ export default function FanOrders() {
             );
           } else {
             setIsLoading(false);
-            setIsError("No orders found for this Fan ID.");
+            setIsError("No orders found for this Fan ID. You can navigate back to your home page by clicking on the ClubConnect header above.");
           }
         })
         .then((ordersWithEvents) => {
@@ -78,7 +79,7 @@ export default function FanOrders() {
 
 
   return (
-    <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
+    <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
       <h1
         className="display-4"
         onClick={() => { router.push("/home-fan"); setIsLoading(true); }}
@@ -90,7 +91,8 @@ export default function FanOrders() {
       >
         ClubConnect
       </h1>
-      <h3 className="display-12">Your Orders</h3>
+      <FanNavBar />
+      <h3 className="display-12 mt-3">Your Orders</h3>
       {isError != "" ? (
             <Alert className="bg-danger text-center text-white rounded">
               {isError}
@@ -103,9 +105,8 @@ export default function FanOrders() {
                 className="my-2"
                 style={{ maxWidth: "600px", width: "100%" }}
               >
-                <Button
-                  variant="light"
-                  className="w-100 p-3 border rounded shadow-sm text-start"
+                <Card
+                  className="w-100 p-3 border-dark border rounded shadow-sm text-start mb-4"
                   style={{ textAlign: "center", width: "100%" }}
                 >
                   <h5 className="fw-bold mb-3 text-center">
@@ -138,7 +139,7 @@ export default function FanOrders() {
                   <div className="text-muted mb-2">
                     <b>Order Status:</b> <i>{order.order_status}</i>
                   </div>
-                </Button>
+                </Card>
               </li>
             ))}
         </ul>

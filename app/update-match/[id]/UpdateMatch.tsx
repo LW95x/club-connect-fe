@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Event } from "@/interfaces/interfaces";
 import Lottie from "lottie-react";
 import footballAnimation from "../../_lib/football.json";
+import ClubNavBar from "@/app/_lib/ClubNavBar";
 
 export default function UpdateMatch({ params }: { params: { id: string } }) {
   const [event, setEvent] = useState<Event>();
@@ -81,9 +82,7 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
-      <div className="text-center">
-        {" "}
+    <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
         <h1
           className="display-4"
           onClick={() => { router.push("/home-club"); setIsLoading(true); }}
@@ -95,12 +94,10 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
         >
           ClubConnect
         </h1>
-        <h3 className="display-12">Update Match</h3>
-      </div>
-
+        <ClubNavBar />
+        <h3 className="display-12 mt-4">Update Match</h3>
       <form
-        className="w-100"
-        style={{ maxWidth: "400px" }}
+        className="w-75"
         onSubmit={handleSubmit}
       >
         <div className="form-group mb-3">

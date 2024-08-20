@@ -221,6 +221,10 @@ export default function RegisterClub() {
             placeholder="Enter your phone number"
             minLength={10}
             required
+            onInput={(e) => {
+              const target = e.target as HTMLInputElement;
+              target.value = target.value.replace(/\D/g, '');
+            }}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
         </div>

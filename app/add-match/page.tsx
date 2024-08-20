@@ -6,6 +6,7 @@ import { Alert } from "react-bootstrap";
 import { postNewEvent } from "@/utils/api";
 import Lottie from "lottie-react";
 import footballAnimation from "../_lib/football.json";
+import ClubNavBar from "../_lib/ClubNavBar";
 
 export default function AddMatch() {
   const router = useRouter();
@@ -71,9 +72,7 @@ export default function AddMatch() {
   }
 
   return (
-    <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
-      <div className="text-center">
-        {" "}
+    <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
         <h1
           className="display-4"
           onClick={() => { router.push("/home-club"); setIsLoading(true); }}
@@ -85,12 +84,11 @@ export default function AddMatch() {
         >
           ClubConnect
         </h1>
-        <h3 className="display-12">Add New Match</h3>
-      </div>
+        <ClubNavBar />
+        <h3 className="display-12 mt-3">Add New Match</h3>
       <form
         ref={formRef}
-        className="w-100"
-        style={{ maxWidth: "400px" }}
+        className="w-50"
         onSubmit={handleSubmit}
       >
         <div className="form-group mb-3">

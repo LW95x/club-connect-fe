@@ -7,6 +7,7 @@ import { getClubById, updateClub, updateClubPassword } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import Lottie from "lottie-react";
 import footballAnimation from "../_lib/football.json";
+import ClubNavBar from "../_lib/ClubNavBar";
 
 export default function ClubProfile() {
   const [club, setClub] = useState<Club>();
@@ -113,9 +114,7 @@ export default function ClubProfile() {
   }
 
   return (
-    <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
-      <div className="text-center">
-        {" "}
+    <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
         <h1
           className="display-4"
           onClick={() => { router.push("/home-club"); setIsLoading(true); }}
@@ -127,9 +126,9 @@ export default function ClubProfile() {
         >
           ClubConnect
         </h1>
-        <h3 className="display-12">Club Profile</h3>
-      </div>
-      <form className="w-100" onSubmit={handlePasswordSubmit}>
+        <ClubNavBar />
+        <h3 className="display-12 mt-3">Club Profile</h3>
+      <form className="w-75" onSubmit={handlePasswordSubmit}>
         <div className="form-group mb-3">
           <label htmlFor="currentpassword" className="form-label">
             Current Password
@@ -162,7 +161,7 @@ export default function ClubProfile() {
             onChange={(e) => setNewPassword(e.target.value)}
           />
         </div>
-        <div className="d-flex flex-column align-items-end mb-5">
+        <div className="d-flex flex-column align-items-center mb-5">
           <button type="submit" className="btn btn-primary mb-2" style={{width: "300px"}}>
             Update Password
           </button>
@@ -178,7 +177,7 @@ export default function ClubProfile() {
               {isError}
             </Alert>
           ) : null}
-      <form className="w-100 mt-10" onSubmit={handleSubmit}>
+      <form className="w-75 mt-10" onSubmit={handleSubmit}>
         <div className="form-group mb-3">
           <label htmlFor="email" className="form-label">
             Email
@@ -219,7 +218,11 @@ export default function ClubProfile() {
             id="phonenumber"
             className="form-control"
             minLength={10}
-            value={club?.phone_number || ""}
+            value={club?.phone_number}
+            onInput={(e) => {
+              const target = e.target as HTMLInputElement;
+              target.value = target.value.replace(/\D/g, '');
+            }}
             onChange={(e) => setClub({ ...club, phone_number: e.target.value })}
           />
         </div>
@@ -305,7 +308,7 @@ export default function ClubProfile() {
             onChange={(e) => setClub({ ...club, twitter: e.target.value })}
           />
         </div>
-        <div className="d-flex justify-content-end mb-5">
+        <div className="d-flex justify-content-center mb-5">
           <button type="submit" className="btn btn-primary" style={{width: "300px"}}>
             Update Profile
           </button>

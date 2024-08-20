@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect, FormEvent } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Alert, Button } from "react-bootstrap";
+import { Alert, Button, Card } from "react-bootstrap";
 import { getEventById, postNewOrder, updateEvent } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { Event } from "@/interfaces/interfaces";
 import Lottie from "lottie-react";
 import footballAnimation from "../../_lib/football.json";
+import FanNavBar from "@/app/_lib/FanNavBar";
 
 export default function SingleMatch({ params }: { params: { id: string } }) {
   const [event, setEvent] = useState<Event>();
@@ -24,6 +25,7 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
   );
   const isTokenExpired =
     !tokenExpirationTime || Date.now() >= Number(tokenExpirationTime);
+    const [currentTickets, setCurrentTickets] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -41,6 +43,7 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
       getEventById(id)
         .then((res) => {
           setEvent(res);
+          setCurrentTickets(res.available_tickets);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -91,8 +94,9 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
           updateEvent(
             event.home_club_id?.toString() ?? "",
             id,
-            event.available_tickets ?? 0 - quantity
+            (currentTickets ?? 0) - quantity
           );
+          setCurrentTickets((currentTickets ?? 0) - quantity);
           setIsSuccess(true);
           setIsLoading(false);
           return res.json();
@@ -129,7 +133,7 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
+    <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
       <h1
         className="display-4"
         onClick={() => {
@@ -144,16 +148,16 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
       >
         ClubConnect
       </h1>
-      <h3 className="display-12">Order Tickets</h3>
+      <FanNavBar />
+      <h3 className="display-12 mt-3">Order Tickets</h3>
       <ul className="list-unstyled d-flex flex-column">
         <li
           key={event?.event_id}
           className="my-2 w-200"
           style={{ maxWidth: "600px" }}
         >
-          <Button
-              variant="light"
-              className="w-200 p-3 border rounded shadow-sm text-start"
+          <Card
+              className="w-200 p-3 border rounded shadow-sm text-start border-dark"
             >
               <h5 className="fw-bold mb-3 text-center">{event?.title}</h5>
               <div className="text-muted mb-3 text-center">{event?.description}</div>
@@ -164,9 +168,9 @@ export default function SingleMatch({ params }: { params: { id: string } }) {
                 <b>Date:</b> {event?.date_time?.split("T")[0]} @ {event?.date_time?.split("T")[1].slice(0,5)}
               </div>
               <div className="text-muted mb-2">
-                <b>Available Tickets:</b> {event?.available_tickets}
+                <b>Available Tickets:</b> {currentTickets}
               </div>
-          </Button>
+          </Card>
         </li>
       </ul>
 

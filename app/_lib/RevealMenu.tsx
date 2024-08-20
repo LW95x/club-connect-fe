@@ -19,15 +19,15 @@ export default function RevealMenu({
     }
   }, [isInView, mainControls]);
   return (
-    <div ref={ref}>
+    <div ref={ref} className="relative overflow-hidden w-full">
       <motion.div
         variants={{
-          hidden: { opacity: 0, y: 75 },
-          visible: { opacity: 1, y: 0 },
+          hidden: { opacity: 0, x: 50 },
+          visible: { opacity: 1, x: 0 },
         }}
         initial="hidden"
         animate={mainControls}
-        transition={{ duration: 1, delay: 0.45 }}
+        transition={{ duration: 0.9, delay: 0 }}
       >
         {children}
       </motion.div>

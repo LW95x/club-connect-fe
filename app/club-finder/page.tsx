@@ -7,6 +7,7 @@ import { Club } from "@/interfaces/interfaces";
 import { useRouter } from "next/navigation";
 import Lottie from "lottie-react";
 import footballAnimation from "../_lib/football.json";
+import FanNavBar from "../_lib/FanNavBar";
 
 export default function ClubFinder() {
   const [clubs, setClubs] = useState<Club[]>([]);
@@ -38,7 +39,7 @@ export default function ClubFinder() {
   }
 
   return (
-    <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
+    <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
       <h1
         className="display-4"
         onClick={() => { router.push("/home-fan"); setIsLoading(true); }}
@@ -50,7 +51,8 @@ export default function ClubFinder() {
       >
         ClubConnect
       </h1>
-      <h3 className="display-12">Club Finder</h3>
+      <FanNavBar />
+      <h3 className="display-12 mt-3">Club Finder</h3>
       {isError != "" ? (
             <Alert className="bg-danger text-center text-white rounded">
               {isError}
@@ -65,7 +67,7 @@ export default function ClubFinder() {
           >
             <Button
               variant="light"
-              className="w-100 p-3 border rounded shadow-sm text-start"
+              className="w-100 p-3 border rounded shadow-sm text-start border-dark"
               onClick={() => { router.push(`/club-matches/${club.club_id}`); setIsLoading(true); }   
               }
             >
