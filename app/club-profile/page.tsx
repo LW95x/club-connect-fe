@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, FormEvent } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Alert, Button } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import { Club } from "@/interfaces/interfaces";
 import { getClubById, updateClub, updateClubPassword } from "@/utils/api";
 import { useRouter } from "next/navigation";
@@ -21,8 +21,8 @@ export default function ClubProfile() {
   const [isClubIdLoaded, setIsClubIdLoaded] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedClubId = localStorage.getItem('club_id');
+    if (typeof window !== "undefined") {
+      const storedClubId = localStorage.getItem("club_id");
       setClubId(storedClubId);
       setIsClubIdLoaded(true);
     }
@@ -42,11 +42,15 @@ export default function ClubProfile() {
         .catch((error) => {
           setIsLoading(false);
           console.error(error);
-          setIsError("Your Club ID could not be found, please log back in from the home page.")
+          setIsError(
+            "Your Club ID could not be found, please log back in from the home page."
+          );
         });
     } else {
       setIsLoading(false);
-      setIsError(`Your Club ID could not be found, please log back in from the home page.`);
+      setIsError(
+        `Your Club ID could not be found, please log back in from the home page.`
+      );
     }
   }, [clubId, isClubIdLoaded]);
 
@@ -56,20 +60,24 @@ export default function ClubProfile() {
     setIsSuccess("");
     setIsError("");
     if (clubId) {
-    updateClubPassword(clubId, currentPassword, newPassword).then((res) => {
-      if (res.ok) {
-        setIsLoading(false);
-        setIsSuccess("Password succesfully updated.");
-        return res.json();
-      } else if (res.ok === false) {
-        setIsError("Password request change failed - Incorrect current password provided.");
-        setIsLoading(false);
-      }
-    });
-  } else {
-    setIsLoading(false);
-    setIsError(`Your Club ID could not be found, please log back in from the home page.`);
-  }
+      updateClubPassword(clubId, currentPassword, newPassword).then((res) => {
+        if (res.ok) {
+          setIsLoading(false);
+          setIsSuccess("Password succesfully updated.");
+          return res.json();
+        } else if (res.ok === false) {
+          setIsError(
+            "Password request change failed - Incorrect current password provided."
+          );
+          setIsLoading(false);
+        }
+      });
+    } else {
+      setIsLoading(false);
+      setIsError(
+        `Your Club ID could not be found, please log back in from the home page.`
+      );
+    }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -88,7 +96,7 @@ export default function ClubProfile() {
         club.stadium_capacity ?? 0,
         club.website,
         club.facebook,
-        club.twitter,
+        club.twitter
       ).then((res) => {
         if (res.ok) {
           setIsLoading(false);
@@ -96,7 +104,9 @@ export default function ClubProfile() {
           return res.json();
         } else if (res.ok === false) {
           setIsLoading(false);
-          setIsError("A database error occurred while attempting to update your club profile, please try again or reload the page.");
+          setIsError(
+            "A database error occurred while attempting to update your club profile, please try again or reload the page."
+          );
         }
       });
     }
@@ -104,10 +114,32 @@ export default function ClubProfile() {
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
-          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Lottie
+            animationData={footballAnimation}
+            loop={true}
+            style={{ width: 300, height: 300 }}
+          />
+          <p
+            className="lead display-6 mb-1 mt-5 text-white font-bold"
+            style={{ marginTop: "20px", marginLeft: "30px" }}
+          >
+            Loading...
+          </p>
         </div>
       </div>
     );
@@ -115,21 +147,32 @@ export default function ClubProfile() {
 
   return (
     <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
-        <h1
-          className="display-4"
-          onClick={() => { router.push("/home-club"); setIsLoading(true); }}
-          style={{ cursor: "pointer", textDecoration: "none" }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.textDecoration = "underline")
-          }
-          onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
+      <h1
+        className="display-4 text-white mt-2"
+        onClick={() => {
+          router.push("/home-club");
+          setIsLoading(true);
+        }}
+        style={{ cursor: "pointer", textDecoration: "none" }}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.textDecoration = "underline")
+        }
+        onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
+      >
+        ClubConnect
+      </h1>
+      <ClubNavBar />
+      <div
+        className="bg-dark text-white opacity-75 p-2 text-center mt-2"
+        style={{ borderRadius: "12px" }}
+      >
+        <h3 className="display-12 m-0">Club Profile</h3>
+      </div>
+      <form className="w-50" onSubmit={handlePasswordSubmit}>
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
         >
-          ClubConnect
-        </h1>
-        <ClubNavBar />
-        <h3 className="display-12 mt-3">Club Profile</h3>
-      <form className="w-75" onSubmit={handlePasswordSubmit}>
-        <div className="form-group mb-3">
           <label htmlFor="currentpassword" className="form-label">
             Current Password
           </label>
@@ -142,7 +185,10 @@ export default function ClubProfile() {
             onChange={(e) => setCurrentPassword(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="newpassword" className="form-label">
             New Password{" "}
             <p style={{ fontSize: "12px" }}>
@@ -162,23 +208,30 @@ export default function ClubProfile() {
           />
         </div>
         <div className="d-flex flex-column align-items-center mb-5">
-          <button type="submit" className="btn btn-primary mb-2" style={{width: "300px"}}>
+          <button
+            type="submit"
+            className="btn btn-primary mb-2"
+            style={{ width: "300px" }}
+          >
             Update Password
           </button>
         </div>
       </form>
       {isSuccess != "" ? (
-            <Alert className="bg-success text-center text-white rounded">
-              {isSuccess}
-            </Alert>
-          ) : null}
+        <Alert className="bg-success text-center text-white rounded">
+          {isSuccess}
+        </Alert>
+      ) : null}
       {isError != "" ? (
-            <Alert className="bg-danger text-center text-white rounded">
-              {isError}
-            </Alert>
-          ) : null}
-      <form className="w-75 mt-10" onSubmit={handleSubmit}>
-        <div className="form-group mb-3">
+        <Alert className="bg-danger text-center text-white rounded">
+          {isError}
+        </Alert>
+      ) : null}
+      <form className="w-50 mt-10" onSubmit={handleSubmit}>
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="email" className="form-label">
             Email
           </label>
@@ -190,7 +243,10 @@ export default function ClubProfile() {
             onChange={(e) => setClub({ ...club, email: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="location" className="form-label">
             Location
             <p style={{ fontSize: "12px" }}>
@@ -206,7 +262,10 @@ export default function ClubProfile() {
             onChange={(e) => setClub({ ...club, location: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="phonenumber" className="form-label">
             Phone Number
             <p style={{ fontSize: "12px" }}>
@@ -221,12 +280,15 @@ export default function ClubProfile() {
             value={club?.phone_number}
             onInput={(e) => {
               const target = e.target as HTMLInputElement;
-              target.value = target.value.replace(/\D/g, '');
+              target.value = target.value.replace(/\D/g, "");
             }}
             onChange={(e) => setClub({ ...club, phone_number: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="clubname" className="form-label">
             Club Name
             <p style={{ fontSize: "12px" }}>(minimum length of 5 characters)</p>
@@ -240,7 +302,10 @@ export default function ClubProfile() {
             onChange={(e) => setClub({ ...club, club_name: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="league" className="form-label">
             League
             <p style={{ fontSize: "12px" }}>(minimum length of 5 characters)</p>
@@ -254,7 +319,10 @@ export default function ClubProfile() {
             onChange={(e) => setClub({ ...club, league: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="capacity" className="form-label">
             Stadium Capacity
           </label>
@@ -269,7 +337,10 @@ export default function ClubProfile() {
             }
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="website" className="form-label">
             Website <p style={{ fontSize: "12px" }}>(optional)</p>
           </label>
@@ -282,7 +353,10 @@ export default function ClubProfile() {
             onChange={(e) => setClub({ ...club, website: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="facebook" className="form-label">
             Facebook <p style={{ fontSize: "12px" }}>(optional)</p>
           </label>
@@ -295,7 +369,10 @@ export default function ClubProfile() {
             onChange={(e) => setClub({ ...club, facebook: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="twitter" className="form-label">
             Twitter <p style={{ fontSize: "12px" }}>(optional)</p>
           </label>
@@ -309,7 +386,11 @@ export default function ClubProfile() {
           />
         </div>
         <div className="d-flex justify-content-center mb-5">
-          <button type="submit" className="btn btn-primary" style={{width: "300px"}}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{ width: "300px" }}
+          >
             Update Profile
           </button>
         </div>

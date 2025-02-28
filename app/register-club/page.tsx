@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { postNewClub } from "@/utils/api";
 import { Alert } from "react-bootstrap";
@@ -79,7 +79,7 @@ export default function RegisterClub() {
             style={{ width: 300, height: 300 }}
           />
           <p
-            className="lead display-6 mb-1 mt-5"
+            className="lead display-6 mb-1 mt-5 text-white font-bold"
             style={{ marginTop: "20px", marginLeft: "30px" }}
           >
             Loading...
@@ -91,7 +91,7 @@ export default function RegisterClub() {
 
   return (
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
-      <div className="text-center">
+      <div className="bg-dark text-white opacity-75 p-4 text-center mt-2" style={{borderRadius: "12px"}}>
         <h1
           className="display-4"
           onClick={() => {
@@ -113,7 +113,7 @@ export default function RegisterClub() {
         style={{ maxWidth: "400px" }}
         onSubmit={handleSubmit}
       >
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="username" className="form-label">
             Username{" "}
             <p style={{ fontSize: "12px" }}>(minimum length of 5 characters)</p>
@@ -128,7 +128,7 @@ export default function RegisterClub() {
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="password" className="form-label">
             Password
             <p style={{ fontSize: "12px" }}>
@@ -147,7 +147,7 @@ export default function RegisterClub() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="email" className="form-label">
             Email
           </label>
@@ -160,7 +160,7 @@ export default function RegisterClub() {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="clubname" className="form-label">
             Club Name{" "}
             <p style={{ fontSize: "12px" }}>(minimum length of 5 characters)</p>
@@ -175,7 +175,7 @@ export default function RegisterClub() {
             onChange={(e) => setClubName(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="league" className="form-label">
             League{" "}
             <p style={{ fontSize: "12px" }}>(minimum length of 5 characters)</p>
@@ -190,7 +190,7 @@ export default function RegisterClub() {
             onChange={(e) => setLeague(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="address" className="form-label">
             Club Address{" "}
             <p style={{ fontSize: "12px" }}>
@@ -207,7 +207,7 @@ export default function RegisterClub() {
             onChange={(e) => setLocation(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="phonenumber" className="form-label">
             Phone Number{" "}
             <p style={{ fontSize: "12px" }}>
@@ -223,12 +223,12 @@ export default function RegisterClub() {
             required
             onInput={(e) => {
               const target = e.target as HTMLInputElement;
-              target.value = target.value.replace(/\D/g, '');
+              target.value = target.value.replace(/\D/g, "");
             }}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="capacity" className="form-label">
             Stadium Capacity
           </label>
@@ -242,7 +242,7 @@ export default function RegisterClub() {
             onChange={(e) => setStadiumCapacity(parseInt(e.target.value))}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="website" className="form-label">
             Club Website <p style={{ fontSize: "12px" }}>(optional)</p>
           </label>
@@ -254,7 +254,7 @@ export default function RegisterClub() {
             onChange={(e) => setWebsite(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="facebook" className="form-label">
             Club Facebook <p style={{ fontSize: "12px" }}>(optional)</p>
           </label>
@@ -266,7 +266,7 @@ export default function RegisterClub() {
             onChange={(e) => setFacebook(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="twitter" className="form-label">
             Club Twitter <p style={{ fontSize: "12px" }}>(optional)</p>
           </label>
@@ -279,7 +279,11 @@ export default function RegisterClub() {
           />
         </div>
         <div className="d-flex justify-content-between mb-5">
-          <button className="btn btn-primary" onClick={() => router.push("/")}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => router.push("/")}
+          >
             Go Back
           </button>
           <button type="submit" className="btn btn-primary">

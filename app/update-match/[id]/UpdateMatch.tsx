@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, FormEvent } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Alert, Button } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import { getEventById, updateEvent } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { Event } from "@/interfaces/interfaces";
@@ -75,7 +75,7 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
-          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+          <p className="lead display-6 mb-1 mt-5 text-white font-bold" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
         </div>
       </div>
     );
@@ -84,7 +84,7 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
   return (
     <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
         <h1
-          className="display-4"
+          className="display-4 text-white mt-2"
           onClick={() => { router.push("/home-club"); setIsLoading(true); }}
           style={{ cursor: "pointer", textDecoration: "none" }}
           onMouseEnter={(e) =>
@@ -95,12 +95,29 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
           ClubConnect
         </h1>
         <ClubNavBar />
-        <h3 className="display-12 mt-4">Update Match</h3>
+        <div
+        className="bg-dark text-white p-2 rounded-xl mt-2 opacity-75 flex items-center justify-center"
+        style={{ borderRadius: "12px", height: "50px"}}
+      >
+        <h3 className="display-12">Update Match</h3>
+        </div>
+        <div className="mt-4 opacity-75">
+      {isSuccess != "" ? (
+            <Alert className="bg-success text-center text-white rounded">
+              {isSuccess}
+            </Alert>
+          ) : null}
+      {isError != "" ? (
+            <Alert className="bg-danger text-center text-white rounded">
+              {isError}
+            </Alert>
+          ) : null}
+      </div>
       <form
-        className="w-75"
+        className="w-50"
         onSubmit={handleSubmit}
       >
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="matchtitle" className="form-label">
             Title
             <p style={{ fontSize: "12px" }}>(minimum length of 5 characters)</p>
@@ -114,7 +131,7 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
             onChange={(e) => setEvent({ ...event, title: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="location" className="form-label">
             Location
             <p style={{ fontSize: "12px" }}>
@@ -130,7 +147,7 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
             onChange={(e) => setEvent({ ...event, location: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="price" className="form-label">
             Price
           </label>
@@ -143,7 +160,7 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
             onChange={(e) => setEvent({ ...event, price: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="date" className="form-label">
             Date & Time
           </label>
@@ -156,7 +173,7 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
             onChange={(e) => setEvent({ ...event, date_time: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="description" className="form-label">
             Description
             <p style={{ fontSize: "12px" }}>
@@ -174,7 +191,7 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
             }
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="tickets" className="form-label">
             Available Tickets
           </label>
@@ -192,24 +209,12 @@ export default function UpdateMatch({ params }: { params: { id: string } }) {
             }
           />
         </div>
-        <div className="d-flex justify-content-end mb-5">
-          <button type="submit" className="btn btn-primary" style={{width: "200px"}}>
+        <div className="d-flex justify-content-center mb-5">
+          <button type="submit" className="btn btn-primary" style={{width: "300px"}}>
             Update Match
           </button>
         </div>
       </form>
-      <div className="mt-2">
-      {isSuccess != "" ? (
-            <Alert className="bg-success text-center text-white rounded">
-              {isSuccess}
-            </Alert>
-          ) : null}
-      {isError != "" ? (
-            <Alert className="bg-danger text-center text-white rounded">
-              {isError}
-            </Alert>
-          ) : null}
-      </div>
     </div>
   );
 }

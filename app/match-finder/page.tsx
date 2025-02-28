@@ -32,7 +32,7 @@ export default function MatchFinder() {
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
-          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+          <p className="lead display-6 mb-1 mt-5 text-white font-bold" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
         </div>
       </div>
     );
@@ -41,7 +41,7 @@ export default function MatchFinder() {
   return (
     <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
       <h1
-        className="display-4"
+        className="display-4 text-white mt-2"
         onClick={() => { router.push("/home-fan"); setIsLoading(true); }}
         style={{ cursor: "pointer", textDecoration: "none" }}
         onMouseEnter={(e) =>
@@ -52,7 +52,12 @@ export default function MatchFinder() {
         ClubConnect
       </h1>
       <FanNavBar />
-      <h3 className="display-12 mt-3">Match Finder</h3>
+      <div
+        className="bg-dark text-white p-2 rounded-xl mt-2 opacity-75 flex items-center justify-center"
+        style={{ borderRadius: "12px", height: "50px", width: "200px" }}
+      >
+        <h3 className="display-12 text-white text-center">Match Finder</h3>
+      </div>
       {isError != "" ? (
             <Alert className="bg-danger text-center text-white rounded">
               {isError}
@@ -66,24 +71,24 @@ export default function MatchFinder() {
             style={{ maxWidth: "600px" }}
           >
                         <Button
-              variant="light"
-              className="w-100 p-3 border rounded shadow-sm text-start border-dark"
+              variant="dark"
+              className="w-100 p-3 border rounded shadow-sm text-start border-dark opacity-75"
               onClick={() => { router.push(`/events/${event.event_id}`); setIsLoading(true); }   
             }
             >
               <h5 className="fw-bold mb-3 text-center">{event.title}</h5>
-              <div className="text-muted mb-3 text-center">{event.description}</div>
+              <div className="mb-3 text-center">{event.description}</div>
               <hr/>
-              <div className="text-muted mb-2"><b>Price:</b> £{event.price}</div>
-              <div className="text-muted mb-2"><b>Location:</b> {event.location}</div>
-              <div className="text-muted mb-2">
+              <div className="mb-2"><b>Price:</b> £{event.price}</div>
+              <div className="mb-2"><b>Location:</b> {event.location}</div>
+              <div className="mb-2">
                 <b>Date:</b> {event.date_time?.split("T")[0]} @ {event.date_time?.split("T")[1].slice(0,5)}
               </div>
-              <div className="text-muted mb-2">
+              <div className="mb-2">
                 <b>Available Tickets:</b> {event.available_tickets}
               </div>
               <hr/>
-              <div className="text-muted mb-2 text-end">
+              <div className="mb-2 text-end">
                 <b>Order Tickets -&gt;</b>
               </div>
             </Button>

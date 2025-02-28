@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, FormEvent, useRef } from "react";
+import { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter } from "next/navigation";
 import { Alert } from "react-bootstrap";
@@ -29,7 +29,7 @@ export default function Callback() {
   return (
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
       <h1
-        className="display-4"
+        className="display-4 mt-2"
         onClick={() => router.push("/home-fan")}
         style={{ cursor: "pointer", textDecoration: "none" }}
         onMouseEnter={(e) =>

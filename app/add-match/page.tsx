@@ -50,22 +50,48 @@ export default function AddMatch() {
           setIsLoading(false);
           return res.json();
         } else if (res.ok === false) {
-          setIsError("A database error occurred while creating the match, please try again or reload the page.");
+          setIsError(
+            "A database error occurred while creating the match, please try again or reload the page."
+          );
           setIsLoading(false);
         }
       });
     } else {
       setIsLoading(false);
-      setIsError(`Your Club ID could not be found, please log back in from the home page.`);
+      setIsError(
+        `Your Club ID could not be found, please log back in from the home page.`
+      );
     }
   };
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
-          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Lottie
+            animationData={footballAnimation}
+            loop={true}
+            style={{ width: 300, height: 300 }}
+          />
+          <p
+            className="lead display-6 mb-1 mt-5 text-white font-bold"
+            style={{ marginTop: "20px", marginLeft: "30px" }}
+          >
+            Loading...
+          </p>
         </div>
       </div>
     );
@@ -73,25 +99,44 @@ export default function AddMatch() {
 
   return (
     <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
-        <h1
-          className="display-4"
-          onClick={() => { router.push("/home-club"); setIsLoading(true); }}
-          style={{ cursor: "pointer", textDecoration: "none" }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.textDecoration = "underline")
-          }
-          onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
-        >
-          ClubConnect
-        </h1>
-        <ClubNavBar />
-        <h3 className="display-12 mt-3">Add New Match</h3>
-      <form
-        ref={formRef}
-        className="w-50"
-        onSubmit={handleSubmit}
+      <h1
+        className="display-4 text-white mt-2"
+        onClick={() => {
+          router.push("/home-club");
+          setIsLoading(true);
+        }}
+        style={{ cursor: "pointer", textDecoration: "none" }}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.textDecoration = "underline")
+        }
+        onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
       >
-        <div className="form-group mb-3">
+        ClubConnect
+      </h1>
+      <ClubNavBar />
+      <div
+        className="bg-dark text-white p-2 rounded-xl mt-2 opacity-75 flex items-center justify-center"
+        style={{ borderRadius: "12px", height: "50px" }}
+      >
+        <h3 className="display-12">Add New Match</h3>
+      </div>
+      <div className="mt-4 opacity-75">
+        {isSuccess != "" ? (
+          <Alert className="bg-success text-center text-white rounded">
+            {isSuccess}
+          </Alert>
+        ) : null}
+        {isError != "" ? (
+          <Alert className="bg-danger text-center text-white rounded">
+            {isError}
+          </Alert>
+        ) : null}
+      </div>
+      <form ref={formRef} className="w-50" onSubmit={handleSubmit}>
+        <div
+          className="form-group mb-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="title" className="form-label">
             Match Title
             <p style={{ fontSize: "12px" }}>(minimum length of 5 characters)</p>
@@ -102,11 +147,14 @@ export default function AddMatch() {
             className="form-control"
             placeholder="Enter your match title"
             minLength={5}
-            required 
+            required
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="location" className="form-label">
             Match Location
             <p style={{ fontSize: "12px" }}>
@@ -123,7 +171,10 @@ export default function AddMatch() {
             onChange={(e) => setLocation(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="price" className="form-label">
             Price
           </label>
@@ -137,7 +188,10 @@ export default function AddMatch() {
             onChange={(e) => setPrice(parseInt(e.target.value))}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="date" className="form-label">
             Date & Time of Match
           </label>
@@ -145,12 +199,15 @@ export default function AddMatch() {
             type="datetime-local"
             id="date"
             className="form-control"
-            min={new Date().toISOString().slice(0, 16)} 
+            min={new Date().toISOString().slice(0, 16)}
             required
             onChange={(e) => setDateTime(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="description" className="form-label">
             Match Description
             <p style={{ fontSize: "12px" }}>
@@ -167,7 +224,10 @@ export default function AddMatch() {
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
           <label htmlFor="tickets" className="form-label">
             Available Tickets
           </label>
@@ -181,24 +241,16 @@ export default function AddMatch() {
             onChange={(e) => setAvailableTickets(parseInt(e.target.value))}
           />
         </div>
-        <div className="d-flex justify-content-end mb-5">
-          <button type="submit" className="btn btn-primary" style={{width: "200px"}}>
+        <div className="d-flex justify-content-center mb-5">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{ width: "300px" }}
+          >
             Create Match
           </button>
         </div>
       </form>
-      <div className="mt-3 mb-2">
-          {isSuccess != "" ? (
-            <Alert className="bg-success text-center text-white rounded">
-              {isSuccess}
-            </Alert>
-          ) : null}
-          {isError != "" ? (
-            <Alert className="bg-danger text-center text-white rounded">
-              {isError}
-            </Alert>
-          ) : null}
-        </div>
     </div>
   );
 }

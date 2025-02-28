@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter } from "next/navigation";
 import { getFanById, updateFanPassword, updateFan } from "@/utils/api";
 import { Fan } from "@/interfaces/interfaces";
-import { Alert, Button } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import Lottie from "lottie-react";
 import footballAnimation from "../_lib/football.json";
 import FanNavBar from "../_lib/FanNavBar";
@@ -40,11 +40,15 @@ export default function FanProfile() {
         .catch((error) => {
           console.error(error);
           setIsLoading(false);
-          setIsError("A database error occurred while attempting to fetch your profile data, please try again or reload the page.")
+          setIsError(
+            "A database error occurred while attempting to fetch your profile data, please try again or reload the page."
+          );
         });
     } else {
       setIsLoading(false);
-      setIsError(`Your Fan ID could not be found, please log back in from the home page.`);
+      setIsError(
+        `Your Fan ID could not be found, please log back in from the home page.`
+      );
     }
   }, [fanId, isFanIdLoaded]);
 
@@ -60,13 +64,17 @@ export default function FanProfile() {
           setIsSuccess("Password succesfully updated.");
           return res.json();
         } else if (res.ok === false) {
-          setIsError("Password request change failed - Incorrect current password provided.");
+          setIsError(
+            "Password request change failed - Incorrect current password provided."
+          );
           setIsLoading(false);
         }
       });
     } else {
       setIsLoading(false);
-      setIsError(`Your Fan ID could not be found, please log back in from the home page.`);
+      setIsError(
+        `Your Fan ID could not be found, please log back in from the home page.`
+      );
     }
   };
 
@@ -88,7 +96,9 @@ export default function FanProfile() {
           setIsSuccess("User details succesfully updated.");
           return res.json();
         } else if (res.ok === false) {
-          setIsError("A database error occurred while attempting to update your club profile, please try again or reload the page.");
+          setIsError(
+            "A database error occurred while attempting to update your club profile, please try again or reload the page."
+          );
           setIsLoading(false);
         }
       });
@@ -97,10 +107,32 @@ export default function FanProfile() {
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
-          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Lottie
+            animationData={footballAnimation}
+            loop={true}
+            style={{ width: 300, height: 300 }}
+          />
+          <p
+            className="lead display-6 mb-1 mt-5 text-white font-bold"
+            style={{ marginTop: "20px", marginLeft: "30px" }}
+          >
+            Loading...
+          </p>
         </div>
       </div>
     );
@@ -108,22 +140,33 @@ export default function FanProfile() {
 
   return (
     <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
-        <h1
-          className="display-4"
-          onClick={() => {router.push("/home-fan"); setIsLoading(true); }}
-          style={{ cursor: "pointer", textDecoration: "none" }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.textDecoration = "underline")
-          }
-          onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
-        >
-          ClubConnect
-        </h1>
-        <FanNavBar />
-        <h3 className="display-12 mt-5">Fan Profile</h3>
+      <h1
+        className="display-4 text-white mt-2"
+        onClick={() => {
+          router.push("/home-fan");
+          setIsLoading(true);
+        }}
+        style={{ cursor: "pointer", textDecoration: "none" }}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.textDecoration = "underline")
+        }
+        onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
+      >
+        ClubConnect
+      </h1>
+      <FanNavBar />
+      <div
+        className="bg-dark text-white p-2 rounded-xl mt-3 opacity-75 flex items-center justify-center"
+        style={{ borderRadius: "12px", height: "50px" }}
+      >
+        <h3 className="display-12 text-white text-center">Fan Profile</h3>
+      </div>
       <form className="w-75" onSubmit={handlePasswordSubmit}>
-        <div className="form-group mb-3">
-          <label htmlFor="currentpassword" className="form-label">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
+          <label htmlFor="currentpassword" className="form-label bg-dark p-1">
             Current Password
           </label>
           <input
@@ -135,8 +178,11 @@ export default function FanProfile() {
             onChange={(e) => setCurrentPassword(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
-          <label htmlFor="newpassword" className="form-label">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
+          <label htmlFor="newpassword" className="form-label bg-dark p-1">
             New Password
             <p style={{ fontSize: "12px" }}>
               (Password must contain one digit from 1 to 9, one lowercase
@@ -155,24 +201,31 @@ export default function FanProfile() {
           />
         </div>
         <div className="d-flex flex-column align-items-center mb-5">
-          <button type="submit" className="btn btn-primary mb-2" style={{width: "300px"}}>
+          <button
+            type="submit"
+            className="btn btn-primary mb-2"
+            style={{ width: "300px" }}
+          >
             Update Password
           </button>
         </div>
       </form>
       {isSuccess != "" ? (
-            <Alert className="bg-success text-center text-white rounded">
-              {isSuccess}
-            </Alert>
-          ) : null}
+        <Alert className="bg-success text-center text-white rounded">
+          {isSuccess}
+        </Alert>
+      ) : null}
       {isError != "" ? (
-            <Alert className="bg-danger text-center text-white rounded">
-              {isError}
-            </Alert>
-          ) : null}
+        <Alert className="bg-danger text-center text-white rounded">
+          {isError}
+        </Alert>
+      ) : null}
       <form className="w-75 mt-10" onSubmit={handleSubmit}>
-        <div className="form-group mb-3">
-          <label htmlFor="dob" className="form-label">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
+          <label htmlFor="dob" className="form-label bg-dark p-1">
             Date of Birth
           </label>
           <input
@@ -183,8 +236,11 @@ export default function FanProfile() {
             onChange={(e) => setFan({ ...fan, date_of_birth: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
-          <label htmlFor="email" className="form-label">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
+          <label htmlFor="email" className="form-label bg-dark p-1">
             Email
           </label>
           <input
@@ -195,8 +251,11 @@ export default function FanProfile() {
             onChange={(e) => setFan({ ...fan, email: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
-          <label htmlFor="address" className="form-label">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
+          <label htmlFor="address" className="form-label bg-dark p-1">
             Address
             <p style={{ fontSize: "12px" }}>
               (minimum length of 10 characters)
@@ -211,8 +270,11 @@ export default function FanProfile() {
             onChange={(e) => setFan({ ...fan, address: e.target.value })}
           />
         </div>
-        <div className="form-group mb-3">
-          <label htmlFor="phonenumber" className="form-label">
+        <div
+          className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4"
+          style={{ borderRadius: "12px" }}
+        >
+          <label htmlFor="phonenumber" className="form-label bg-dark p-1">
             Phone Number
             <p style={{ fontSize: "12px" }}>
               (minimum length of 10 characters)
@@ -226,13 +288,17 @@ export default function FanProfile() {
             value={fan?.phone_number}
             onInput={(e) => {
               const target = e.target as HTMLInputElement;
-              target.value = target.value.replace(/\D/g, '');
+              target.value = target.value.replace(/\D/g, "");
             }}
             onChange={(e) => setFan({ ...fan, phone_number: e.target.value })}
           />
         </div>
         <div className="d-flex justify-content-center mb-5">
-          <button type="submit" className="btn btn-primary" style={{width: "300px"}}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{ width: "300px" }}
+          >
             Update Profile
           </button>
         </div>

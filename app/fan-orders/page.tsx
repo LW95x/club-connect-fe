@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Alert, Button, Card } from "react-bootstrap";
+import { Alert, Card } from "react-bootstrap";
 import { fetchFanOrders, getEventById } from "@/utils/api";
 import { OrderWithEvent } from "@/interfaces/interfaces";
 import { useRouter } from "next/navigation";
@@ -71,7 +71,7 @@ export default function FanOrders() {
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
-          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+          <p className="lead display-6 mb-1 mt-5 text-white font-bold" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
         </div>
       </div>
     );
@@ -81,7 +81,7 @@ export default function FanOrders() {
   return (
     <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
       <h1
-        className="display-4"
+        className="display-4 text-white mt-2"
         onClick={() => { router.push("/home-fan"); setIsLoading(true); }}
         style={{ cursor: "pointer", textDecoration: "none" }}
         onMouseEnter={(e) =>
@@ -92,7 +92,12 @@ export default function FanOrders() {
         ClubConnect
       </h1>
       <FanNavBar />
-      <h3 className="display-12 mt-3">Your Orders</h3>
+      <div
+        className="bg-dark text-white p-2 rounded-xl mt-2 opacity-75 flex items-center justify-center"
+        style={{ borderRadius: "12px", height: "50px"}}
+      >
+        <h3 className="display-12 text-white text-center">Your Orders</h3>
+      </div>
       {isError != "" ? (
             <Alert className="bg-danger text-center text-white rounded">
               {isError}
@@ -106,19 +111,19 @@ export default function FanOrders() {
                 style={{ maxWidth: "600px", width: "100%" }}
               >
                 <Card
-                  className="w-100 p-3 border-dark border rounded shadow-sm text-start mb-4"
+                  className="w-100 p-3 border-dark border rounded shadow-sm text-start mb-4 bg-dark text-white opacity-75"
                   style={{ textAlign: "center", width: "100%" }}
                 >
                   <h5 className="fw-bold mb-3 text-center">
                     {order.title}
                   </h5>
-                  <div className="text-muted mb-3 text-center">{order.description}</div>
+                  <div className="mb-3 text-center">{order.description}</div>
                   <hr/>
-                  <div className="text-muted mb-2">
+                  <div className="mb-2">
                     <b>Event Date:</b> {order?.date_time?.split("T")[0] || ""} @{" "}
                     {order?.date_time?.split("T")[1].slice(0, 5) || ""}
                   </div>
-                  <div className="text-muted mb-4">
+                  <div className="mb-4">
                     <b>Location:</b> {order.location}
                   </div>
                   <hr />
@@ -126,17 +131,17 @@ export default function FanOrders() {
                     Order Details
                   </div>
                   <hr />
-                  <div className="text-muted mb-2">
+                  <div className="mb-2">
                     <b>Order Time & Date:</b> {order.order_date.split("T")[0] || ""} @{" "}
                     {order.order_date.split("T")[1].slice(0, 5) || ""}
                   </div>
-                  <div className="text-muted mb-2">
+                  <div className="mb-2">
                    <b>Quantity:</b> {order.quantity} 
                   </div>
-                  <div className="text-muted mb-2">
+                  <div className="mb-2">
                   <b>Total Price:</b> £{order.total_price}
                   </div>
-                  <div className="text-muted mb-2">
+                  <div className="mb-2">
                     <b>Order Status:</b> <i>{order.order_status}</i>
                   </div>
                 </Card>

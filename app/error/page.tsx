@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, FormEvent, useRef } from "react";
+import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter } from "next/navigation";
 import { Alert } from "react-bootstrap";
@@ -12,10 +12,32 @@ export default function Error() {
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
-          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Lottie
+            animationData={footballAnimation}
+            loop={true}
+            style={{ width: 300, height: 300 }}
+          />
+          <p
+            className="lead display-6 mb-1 mt-5 text-white font-bold"
+            style={{ marginTop: "20px", marginLeft: "30px" }}
+          >
+            Loading...
+          </p>
         </div>
       </div>
     );
@@ -24,8 +46,11 @@ export default function Error() {
   return (
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
       <h1
-        className="display-4"
-        onClick={() => { router.push("/home-fan"); setIsLoading(true); }}
+        className="display-4 text-white mt-2"
+        onClick={() => {
+          router.push("/home-fan");
+          setIsLoading(true);
+        }}
         style={{ cursor: "pointer", textDecoration: "none" }}
         onMouseEnter={(e) =>
           (e.currentTarget.style.textDecoration = "underline")

@@ -20,8 +20,8 @@ export default function LoginClub() {
     setIsError("");
     postLoginClub(username, password).then((res) => {
       if (res.ok === true) {
-        fetchAllClubs().then((res: any) => {
-          const ClubDetails = res.clubs.filter((club: any) => {
+        fetchAllClubs().then((clubs: any) => {
+          const ClubDetails = clubs.filter((club: any) => {
             return club.username === username;
           });
           localStorage.setItem("club", username);
@@ -37,10 +37,32 @@ export default function LoginClub() {
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
-          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Lottie
+            animationData={footballAnimation}
+            loop={true}
+            style={{ width: 300, height: 300 }}
+          />
+          <p
+            className="lead display-6 mb-1 mt-5 text-white font-bold"
+            style={{ marginTop: "20px", marginLeft: "30px" }}
+          >
+            Loading...
+          </p>
         </div>
       </div>
     );
@@ -48,10 +70,13 @@ export default function LoginClub() {
 
   return (
     <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
-      <div className="text-center">
-      <h1
+      <div className="bg-dark text-white opacity-75 p-4 text-center" style={{borderRadius: "12px"}}>
+        <h1
           className="display-4"
-          onClick={() => { router.push("/"); setIsLoading(true); }}
+          onClick={() => {
+            router.push("/");
+            setIsLoading(true);
+          }}
           style={{ cursor: "pointer", textDecoration: "none" }}
           onMouseEnter={(e) =>
             (e.currentTarget.style.textDecoration = "underline")
@@ -67,7 +92,7 @@ export default function LoginClub() {
         style={{ maxWidth: "400px" }}
         onSubmit={handleSubmit}
       >
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="username" className="form-label">
             Username
           </label>
@@ -80,7 +105,7 @@ export default function LoginClub() {
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="password" className="form-label">
             Password
           </label>
@@ -94,7 +119,11 @@ export default function LoginClub() {
           />
         </div>
         <div className="d-flex justify-content-between mb-5">
-          <button className="btn btn-primary" onClick={() => router.push("/")}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => router.push("/")}
+          >
             Go Back
           </button>
           <button type="submit" className="btn btn-primary">
@@ -103,10 +132,10 @@ export default function LoginClub() {
         </div>
       </form>
       {isError != "" ? (
-            <Alert className="bg-danger text-center text-white rounded">
-              {isError}
-            </Alert>
-          ) : null}
+        <Alert className="bg-danger text-center text-white rounded">
+          {isError}
+        </Alert>
+      ) : null}
     </div>
   );
 }

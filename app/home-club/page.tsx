@@ -57,7 +57,7 @@ export default function HomeClub() {
             style={{ width: 300, height: 300 }}
           />
           <p
-            className="lead display-6 mb-1 mt-5"
+            className="lead display-6 mb-1 mt-5 text-white font-bold"
             style={{ marginTop: "20px", marginLeft: "30px" }}
           >
             Loading...
@@ -69,20 +69,11 @@ export default function HomeClub() {
 
   return (
     <div className="container-fluid d-flex flex-column justify-content-start align-items-center vh-100 vw-100 p-0">
-      <h1 className="display-4">ClubConnect</h1>
+      <h1 className="display-4 mb-4 text-white mt-2">ClubConnect</h1>
       <ClubNavBar />
       <div className="d-flex flex-column gap-3 w-50 mt-5">
         <button
-          className="btn btn-outline-dark btn-lg"
-          onClick={() => {
-            router.push("/club-matches");
-            setIsLoading(true);
-          }}
-        >
-          My Matches
-        </button>
-        <button
-          className="btn btn-outline-dark btn-lg"
+          className="btn btn-dark btn-lg mb-2 mt-5 opacity-75"
           onClick={() => {
             router.push("/add-match");
             setIsLoading(true);
@@ -91,7 +82,16 @@ export default function HomeClub() {
           Add New Match
         </button>
         <button
-          className="btn btn-outline-dark btn-lg"
+          className="btn btn-dark btn-lg mb-2 opacity-75"
+          onClick={() => {
+            router.push("/club-matches");
+            setIsLoading(true);
+          }}
+        >
+          My Matches
+        </button>
+        <button
+          className="btn btn-dark btn-lg mb-2 opacity-75"
           onClick={() => {
             router.push("/club-profile");
             setIsLoading(true);
@@ -100,30 +100,11 @@ export default function HomeClub() {
           My Profile
         </button>
         <button
-          className="btn btn-outline-dark btn-lg"
-          onClick={() => {
-            {
-              handleClick;
-            }
-            setIsLoading(true);
-          }}
+          className="btn btn-dark btn-lg mb-2 opacity-75"
+          onClick={handleClick}
         >
           Logout Club
         </button>
-      </div>
-      <div className="container-fluid mt-5 p-0">
-        <img
-          src="/nlfootball.jpg"
-          alt="Non-League Football"
-          className="img-fluid w-10 rounded"
-          style={{
-            height: "400px",
-            objectFit: "cover",
-            width: "100%",
-            position: "fixed",
-            bottom: "0",
-          }}
-        />
       </div>
     </div>
   );

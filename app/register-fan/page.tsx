@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { postNewFan } from "@/utils/api";
 import { Alert } from "react-bootstrap";
@@ -26,7 +26,9 @@ export default function RegisterFan() {
         if (res.ok) {
           return res.json();
         } else if (res.ok === false) {
-          setIsError("A database error occurred while creating your club account, please try again or reload the page.");
+          setIsError(
+            "A database error occurred while creating your club account, please try again or reload the page."
+          );
           setIsLoading(false);
         }
       })
@@ -39,10 +41,32 @@ export default function RegisterFan() {
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Lottie animationData={footballAnimation} loop={true} style={{ width: 300, height: 300 }} />
-          <p className="lead display-6 mb-1 mt-5" style={{marginTop: "20px", marginLeft: "30px"}}>Loading...</p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Lottie
+            animationData={footballAnimation}
+            loop={true}
+            style={{ width: 300, height: 300 }}
+          />
+          <p
+            className="lead display-6 mb-1 mt-5 text-white font-bold"
+            style={{ marginTop: "20px", marginLeft: "30px" }}
+          >
+            Loading...
+          </p>
         </div>
       </div>
     );
@@ -50,10 +74,13 @@ export default function RegisterFan() {
 
   return (
     <div className="container d-flex flex-column justify-content-start align-items-center vh-100">
-      <div className="text-center">
-      <h1
+      <div className="bg-dark text-white opacity-75 p-4 text-center mt-2" style={{borderRadius: "12px"}}>
+        <h1
           className="display-4"
-          onClick={() => { router.push("/"); setIsLoading(true); }}
+          onClick={() => {
+            router.push("/");
+            setIsLoading(true);
+          }}
           style={{ cursor: "pointer", textDecoration: "none" }}
           onMouseEnter={(e) =>
             (e.currentTarget.style.textDecoration = "underline")
@@ -69,7 +96,7 @@ export default function RegisterFan() {
         style={{ maxWidth: "400px" }}
         onSubmit={handleSubmit}
       >
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="username" className="form-label">
             Username{" "}
             <p style={{ fontSize: "12px" }}>(minimum length of 5 characters)</p>
@@ -84,7 +111,7 @@ export default function RegisterFan() {
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="password" className="form-label">
             Password
             <p style={{ fontSize: "12px" }}>
@@ -103,7 +130,7 @@ export default function RegisterFan() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="email" className="form-label">
             Email
           </label>
@@ -116,7 +143,7 @@ export default function RegisterFan() {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="address" className="form-label">
             Address
             <p style={{ fontSize: "12px" }}>
@@ -133,7 +160,7 @@ export default function RegisterFan() {
             onChange={(e) => setAddress(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="dateofbirth" className="form-label">
             Date of Birth
           </label>
@@ -145,7 +172,7 @@ export default function RegisterFan() {
             onChange={(e) => setDateOfBirth(e.target.value)}
           />
         </div>
-        <div className="form-group mb-3">
+        <div className="form-group mb-3 mt-3 text-white bg-dark opacity-75 p-4" style={{borderRadius: "12px"}}>
           <label htmlFor="phonenumber" className="form-label">
             Phone Number{" "}
             <p style={{ fontSize: "12px" }}>
@@ -161,13 +188,17 @@ export default function RegisterFan() {
             required
             onInput={(e) => {
               const target = e.target as HTMLInputElement;
-              target.value = target.value.replace(/\D/g, '');
+              target.value = target.value.replace(/\D/g, "");
             }}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
         </div>
         <div className="d-flex justify-content-between mb-5">
-          <button className="btn btn-primary" onClick={() => router.push("/")}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => router.push("/")}
+          >
             Go Back
           </button>
           <button type="submit" className="btn btn-primary">

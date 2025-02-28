@@ -140,7 +140,7 @@ export function postNewFan(
   date_of_birth: string,
   address: string,
   email: string,
-  phone_number: string,
+  phone_number: string
 ) {
   const url = baseUrl + `fans/register`;
   const reqBody = {
@@ -178,7 +178,7 @@ export function postNewClub(
   phone_number: string,
   website?: string,
   facebook?: string,
-  twitter?: string,
+  twitter?: string
 ) {
   const url = baseUrl + `clubs/register`;
   const reqBody: {
@@ -227,7 +227,7 @@ export function postNewClub(
 export function updateFanPassword(
   id: string,
   current_password: string,
-  new_password: string,
+  new_password: string
 ) {
   const url = baseUrl + `fans/` + id + `/change-password`;
   const reqBody = {
@@ -256,7 +256,7 @@ export function updateFan(
   date_of_birth: string,
   email: string,
   address: string,
-  phone_number: string,
+  phone_number: string
 ) {
   const url = baseUrl + `fans/` + id;
   const reqBody = {
@@ -285,7 +285,7 @@ export function updateFan(
 export function updateClubPassword(
   id: string,
   current_password: string,
-  new_password: string,
+  new_password: string
 ) {
   const url = baseUrl + `clubs/` + id + `/change-password`;
   const reqBody = {
@@ -319,7 +319,7 @@ export function updateClub(
   stadium_capacity: number,
   website?: string,
   facebook?: string,
-  twitter?: string,
+  twitter?: string
 ) {
   const url = baseUrl + `clubs/` + id;
   const reqBody: {
@@ -369,7 +369,7 @@ export function postNewEvent(
   price: number,
   date_time: string,
   description: string,
-  available_tickets: number,
+  available_tickets: number
 ) {
   const url = baseUrl + `clubs/` + id + `/events`;
   const reqBody = {
@@ -404,7 +404,7 @@ export function postNewOrder(
   total_price: number,
   order_status: string,
   add_to_calendar: boolean,
-  token?: string,
+  token?: string
 ) {
   const url = baseUrl + `fans/` + id + `/orders`;
   const reqBody = {
@@ -440,7 +440,7 @@ export function updateEvent(
   location?: string,
   price?: number,
   date_time?: string,
-  description?: string,
+  description?: string
 ) {
   const url = baseUrl + `clubs/` + clubId + `/events/` + eventId;
   const reqBody = {
@@ -466,4 +466,32 @@ export function updateEvent(
     .catch((error) => {
       return error;
     });
+}
+
+export function updateOrder(
+  fanId: string,
+  orderId: string,
+  updates: {
+  order_status?: string;
+  quantity?: number;
+  total_price?: number;
+  }
+) {
+  const url = baseUrl + `fans/` + fanId + `/orders/` + orderId;
+
+  const patchObject = {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updates),
+  };
+
+  return fetch(url, patchObject)
+  .then((res) => {
+    return res;
+  })
+  .catch((error) => {
+    return error;
+  });
 }
